@@ -51,6 +51,9 @@
       "style": {
         "navigationBarTextStyle": "black",
         "navigationBarBackgroundColor": "#fff"
+      },
+      "app-plus": {
+        "bounce": "none" // 将回弹属性关掉
       }
     }
   ],

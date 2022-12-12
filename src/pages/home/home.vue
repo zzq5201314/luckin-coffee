@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 22:52:35
- * @LastEditTime: 2022-12-11 22:17:30
+ * @LastEditTime: 2022-12-12 22:57:40
  * @LastEditors: you name
  * @Description: 
 -->
@@ -195,6 +195,7 @@
       </view>
 
     </view>
+    <text>{{errorlog}}</text>
   </view>
 </template>
 

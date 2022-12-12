@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-08 16:41:24
- * @LastEditTime: 2022-12-11 00:26:59
+ * @LastEditTime: 2022-12-12 16:07:30
  * @LastEditors: you name
  * @Description: 
 -->
@@ -24,4 +24,8 @@ export default {
 <style lang="scss">
 @import url('./static/font/iconfont.css');
 /*每个页面公共css */
+//去除滚动条
+// ::-webkit-scrollbar {
+//   display: none !important;
+// }
 </style>

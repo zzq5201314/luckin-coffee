@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* These styles will be purged */
+@layer components {
+  .btn {
+    /* ... */
+  }
+}
+
+/* These styles will not be purged */
+.flatpickr-innerContainer {
+  /* ... */
+}
+.flatpickr-weekdayContainer {
+  /* ... */
+}
+.flatpickr-weekday {
+  /* ... */
+}

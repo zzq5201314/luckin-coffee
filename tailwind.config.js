@@ -1,14 +1,18 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-10 01:52:49
- * @LastEditTime: 2022-12-11 14:56:48
+ * @LastEditTime: 2022-12-12 22:36:59
  * @LastEditors: you name
  * @Description: 
  */
 module.exports = {
   // Tree-shake unused styles in production build
   // purge: ['./src/**/*.{vue,js,ts,jsx,tsx,html}'],
-  purge: [],
+  purge: [
+    './src/**/*.html',
+    './src/**/*.vue',
+    './src/**/*.jsx',
+  ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {

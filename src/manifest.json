@@ -1,5 +1,5 @@
 {
-    "name" : "咖啡",
+    "name" : "羊洋咖啡",
     "appid" : "__UNI__C5C077D",
     "description" : "",
     "versionName" : "1.0.0",
@@ -54,10 +54,11 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        "appid" : "wxab672fea721d876c",
+        "appid" : "wx0b6a85cc1a44105b",
         "setting" : {
             "urlCheck" : false,
-            "minified" : true
+            "minified" : true,
+            "es6" : true
         },
         "usingComponents" : true
     },
