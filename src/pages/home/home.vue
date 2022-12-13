@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 22:52:35
- * @LastEditTime: 2022-12-12 22:57:40
+ * @LastEditTime: 2022-12-13 19:58:51
  * @LastEditors: you name
  * @Description: 
 -->
@@ -175,7 +175,9 @@
               v-for="(productItem, productIndex) in productList"
               :key="productIndex"
               class="flex flex-col rounded-xl bg-white overflow-hidden"
+              @click="goProductInfo(productItem.pid)"
             >
+              <!-- {{productItem}} -->
               <image
                 :src="productItem.smallImg"
                 class="w-full h-44 "
@@ -195,7 +197,7 @@
       </view>
 
     </view>
-    <text>{{errorlog}}</text>
+    <!-- <text>{{errorlog}}</text> -->
   </view>
 </template>
 
@@ -275,6 +277,14 @@ export default {
           console.log('条码类型：' + res.scanType)
           console.log('条码内容：' + res.result)
         }
+      })
+    },
+
+    goProductInfo (id) {
+      console.log('跳转');
+      this.$Router.push({
+        path: '/pages/productInfo/productInfo',
+        query: { productId: id },
       })
     }
   }

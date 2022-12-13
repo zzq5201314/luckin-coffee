@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-10 01:52:49
- * @LastEditTime: 2022-12-12 22:36:59
+ * @LastEditTime: 2022-12-13 20:32:54
  * @LastEditors: you name
  * @Description: 
  */
@@ -30,7 +30,8 @@ module.exports = {
         'orange-700': "#c2410c",
         'orange-800': "#9a3412",
         'orange-900': "#7c2d12",
-
+        'selectText': '#0022ab',
+        'selectBG': '#eaeeff',
       }
     },
     // Disable breakpoints
