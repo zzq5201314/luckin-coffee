@@ -65,6 +65,17 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/login/login",
+      "name": "login",
+      "meta": {
+        "title": "账号道路"
+      },
+      "style": {
+        "navigationBarTitleText": "账户登录"
+        // "navigationStyle": "custom"
+      }
     }
   ],
 

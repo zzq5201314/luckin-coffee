@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 22:52:35
- * @LastEditTime: 2022-12-13 19:58:51
+ * @LastEditTime: 2022-12-14 23:45:18
  * @LastEditors: you name
  * @Description: 
 -->
@@ -75,7 +75,9 @@
         >
           <text class="">Lucky you~跟幸运打个招呼</text>
           <text
-            class="bg-goldenFont text-black px-2 py-1 rounded-full">登录/注册</text>
+            class="bg-goldenFont text-black px-2 py-1 rounded-full"
+            @click="goLogin"
+          >登录/注册</text>
         </view>
 
         <view class="grid grid-cols-3 text-center bg-white px-4">
@@ -280,11 +282,20 @@ export default {
       })
     },
 
+    // 跳转商品详情页
     goProductInfo (id) {
       console.log('跳转');
       this.$Router.push({
         path: '/pages/productInfo/productInfo',
         query: { productId: id },
+      })
+    },
+
+    // 去登录
+    goLogin () {
+      this.$Router.push({
+        path: '/pages/login/login',
+
       })
     }
   }

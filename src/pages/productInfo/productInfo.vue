@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-14 23:38:38
+ * @LastEditTime: 2022-12-14 23:39:38
  * @LastEditors: you name
  * @Description: 
 -->
@@ -55,7 +55,6 @@
               v-for="(keyItem,keyIndex) in rulesItem.ruleItem"
               :key="keyIndex"
               @click="selectRules(rulesItem,keyIndex)"
-              :class="[{actice:rulesItem.acticeIndex==keyIndex}]"
               class=" py-2 bg-gray-50 rounded-md text-center border border-gray-50 text-gray-600 border-solid"
             >{{keyItem.key}}</text>
 
