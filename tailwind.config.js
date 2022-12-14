@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-10 01:52:49
- * @LastEditTime: 2022-12-13 20:32:54
+ * @LastEditTime: 2022-12-14 21:30:20
  * @LastEditors: you name
  * @Description: 
  */
@@ -32,14 +32,18 @@ module.exports = {
         'orange-900': "#7c2d12",
         'selectText': '#0022ab',
         'selectBG': '#eaeeff',
-      }
+      },
+
     },
+
     // Disable breakpoints
     screen: {},
 
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'],
+    },
   },
   plugins: [],
   corePlugins: {//禁用一些小程序class不支持的分割
