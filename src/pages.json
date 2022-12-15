@@ -70,10 +70,11 @@
       "path": "pages/login/login",
       "name": "login",
       "meta": {
-        "title": "账号道路"
+        "title": "账户登录"
       },
       "style": {
-        "navigationBarTitleText": "账户登录"
+        "navigationStyle": "custom"
+        // "navigationBarTitleText": "账户登录"
         // "navigationStyle": "custom"
       }
     }

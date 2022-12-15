@@ -59,6 +59,7 @@
 
 import Vue from 'vue'
 import axios from 'axios'
+import qs from 'qs';
 
 // create an axios instance
 const service = axios.create({
@@ -78,9 +79,11 @@ service.interceptors.request.use(
 		let appkey = 'U2FsdGVkX19WSQ59Cg+Fj9jNZPxRC5y0xB1iV06BeNA='
 		if (config.method === 'get') {
 			config.params = { ...config.params, appkey }
-		} else if (config.method === 'post') {
-			config.data = { ...config.data, appkey }
+		} else {
+			config.data = qs.stringify({ ...config.data, appkey })
+
 		}
+		console.log("config", config)
 
 		config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 		// console.log("config", config)
