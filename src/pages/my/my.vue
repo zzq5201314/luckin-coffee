@@ -1,26 +1,27 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 23:20:43
- * @LastEditTime: 2022-12-17 00:38:37
+ * @LastEditTime: 2022-12-17 01:24:21
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- my 页 -->
 <template>
-  <view class="my bg-gray-100 ">
+  <view class="my bg-gray-100 relative min-h-screen">
     <view class="relative">
       <image
         :src="bgUrl"
-        class="w-full"
+        class="w-full h-80 "
+        mode="aspectFill"
       ></image>
 
-      <view class="relative px-2 w-full userCard">
+      <view class=" px-2 userCard relative">
         <view class="flex items-center text-white">
           <image
             :src="userImg"
             class="h-16 w-16 rounded-full border-2 border-solid border-white bg-white"
           ></image>
-          <text>{{name}}</text>
+          <text class="ml-2 font-semibold">{{name}}</text>
           <text class="iconfont">&#xe605;</text>
         </view>
         <!-- 名字 头像 end -->
@@ -96,7 +97,8 @@
       </view>
 
       <view
-        class=" mt-4 h-20 whitespace-nowrap overflow-hidden overflow-x-auto">
+        class="w-screen mt-4 h-24 whitespace-nowrap overflow-hidden overflow-x-auto"
+      >
         <image
           src="https://m15.360buyimg.com/mobilecms/s1062x420_jfs/t1/131926/15/25947/50682/630882a7E3b00d35c/7093c8692f6386d3.jpg!cr_1053x420_4_0!q70.jpg"
           class=" h-full rounded-lg mx-2"
@@ -116,12 +118,12 @@
 
         <view class="mt-2 grid grid-cols-2 gap-2 pb-4">
           <image
-            src="@/static/img/card.jpg"
+            src="https://ts1.cn.mm.bing.net/th/id/R-C.fcc8ea37e1a59cb5d209504ab4f01be2?rik=1aonDodf7g1rEA&riu=http%3a%2f%2fi0.hdslb.com%2fbfs%2farchive%2fe2c01f968d4b844d3389362d55641ad7c45a0d25.jpg&ehk=8WV38hH9W3ztpRti1oNEQslftOnvLhxEKD0wFG3ff60%3d&risl=1&pid=ImgRaw&r=0"
             class="w-full h-32 rounded-lg"
           >
           </image>
           <image
-            src="@/static/img/card.jpg"
+            src="https://ts1.cn.mm.bing.net/th/id/R-C.fcc8ea37e1a59cb5d209504ab4f01be2?rik=1aonDodf7g1rEA&riu=http%3a%2f%2fi0.hdslb.com%2fbfs%2farchive%2fe2c01f968d4b844d3389362d55641ad7c45a0d25.jpg&ehk=8WV38hH9W3ztpRti1oNEQslftOnvLhxEKD0wFG3ff60%3d&risl=1&pid=ImgRaw&r=0"
             class="w-full h-32 rounded-lg"
           >
           </image>

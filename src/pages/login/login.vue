@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-14 23:42:30
- * @LastEditTime: 2022-12-15 23:17:55
+ * @LastEditTime: 2022-12-17 01:06:40
  * @LastEditors: you name
  * @Description: 登录页
 -->
@@ -28,7 +28,7 @@
 
     <view class="w-full h-screen fixed">
       <image
-        src="../../static/img/R-C.jpg"
+        src="https://ts1.cn.mm.bing.net/th/id/R-C.b327e316c2ab5ec4263964b0fa5dd57f?rik=AGmCS2Wadp1xYQ&riu=http%3a%2f%2fwww.guojicoffee.com%2fuploadfile%2f2018%2f0314%2f20180314115357326.jpg&ehk=kOM%2fCWhLdSEmRLQLN0yDUVEik3DCAc6fnW5FSFpUBw8%3d&risl=&pid=ImgRaw&r=0"
         class=" h-full w-full"
         mode="aspectFill"
       ></image>

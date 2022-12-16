@@ -1,11 +1,12 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-09 22:46:22
- * @LastEditTime: 2022-12-10 21:02:34
+ * @LastEditTime: 2022-12-17 01:03:01
  * @LastEditors: you name
  * @Description: 
  */
 //vue.config.js
+
 const TransformPages = require('uni-read-pages')
 const { webpack } = new TransformPages()
 module.exports = {
@@ -19,7 +20,8 @@ module.exports = {
 					});
 					return JSON.stringify(tfPages.routes)
 				}, true)
-			})
+			}),
+
 		],
 
 	}
