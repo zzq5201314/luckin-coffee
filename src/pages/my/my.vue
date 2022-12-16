@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 23:20:43
- * @LastEditTime: 2022-12-16 23:53:14
+ * @LastEditTime: 2022-12-17 00:38:37
  * @LastEditors: you name
  * @Description: 
 -->
@@ -26,19 +26,41 @@
         <!-- 名字 头像 end -->
 
         <view class="p-3 bg-white rounded-xl mt-3 ">
-          <view class="font-semibold">欢迎~Luckin新便宜</view>
+          <view
+            class="font-semibold"
+            v-if="name"
+          >Lv1 {{name}}</view>
+          <view
+            class="font-semibold"
+            v-else
+          >欢迎~Luckin新便宜</view>
           <view class="flex justify-between items-center mt-2">
             <text class="text-2xl">0</text>
-            <text class="text-xs text-gray-600 iconfont">去喝一杯加入Luckin&#xe605;
-            </text>
+            <myLink
+              class="text-xs text-gray-600 iconfont"
+              v-if="name"
+              :to="{path:'/pages/menu/menu'}"
+            >已为您保级30天，去冲刺&#xe605;
+            </myLink>
+            <myLink
+              class="text-xs text-gray-600 iconfont"
+              v-else
+              :to="{path:'/pages/login/login'}"
+            >去喝一杯加入Luckin&#xe605;
+            </myLink>
           </view>
           <view class="bg-gray-100 h-1 w-full rounded-full"></view>
         </view>
       </view>
       <!-- 用户信息卡片 end -->
 
-      <view class="mt-7 px-2">
-        <view class="grid grid-cols-5  text-xs text-center ">
+      <view class="mt-4 px-2 ">
+        <view
+          class="grid grid-cols-5  text-xs text-center mt-3 "
+          v-for="(item,index) in 2"
+          :key="index"
+          v-show="index ==0 |isUnfold"
+        >
 
           <view>
             <view class="iconfont text-4xl">&#xe663;</view>
@@ -62,6 +84,15 @@
           </view>
 
         </view>
+
+        <view class="flex items-center justify-center mt-2">
+          <text
+            class="iconfont text-lg"
+            @click="unfold
+"
+          >{{isUnfold?'&#xe606;':'&#xe60d;'}}</text>
+        </view>
+
       </view>
 
       <view
@@ -77,8 +108,24 @@
         ></image>
       </view>
 
-      <view class="">
+      <view class="mt-4 px-2">
+        <view class="flex justify-between items-center">
+          <text class="font-semibold">送礼品卡</text>
+          <text class="text-xs">查看全部</text>
+        </view>
 
+        <view class="mt-2 grid grid-cols-2 gap-2 pb-4">
+          <image
+            src="@/static/img/card.jpg"
+            class="w-full h-32 rounded-lg"
+          >
+          </image>
+          <image
+            src="@/static/img/card.jpg"
+            class="w-full h-32 rounded-lg"
+          >
+          </image>
+        </view>
       </view>
 
     </view>
@@ -89,13 +136,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getUser } from '@/api/user'
+import myLink from 'uni-simple-router/dist/link.vue';
 export default {
   name: "my",
   data () {
     return {
-      bgUrl: ''
+      bgUrl: '',
+      isUnfold: false
     }
   },
+  components: { myLink },
   computed: {
     ...mapGetters(['name', 'userImg'])
   },
@@ -110,6 +160,9 @@ export default {
         console.log("getUser => response", response)
 
       })
+    },
+    unfold () {
+      this.isUnfold = !this.isUnfold
     }
   }
 }
@@ -119,6 +172,10 @@ export default {
 .my {
   .userCard {
     margin-top: -35%;
+  }
+
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
   }
 }
 </style>
