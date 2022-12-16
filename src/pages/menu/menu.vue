@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-13 19:29:13
+ * @LastEditTime: 2022-12-16 18:21:57
  * @LastEditors: you name
  * @Description: 
 -->
@@ -139,6 +139,7 @@ export default {
       let data = []
       // 获取分类
       await getType().then(response => {
+        console.log("awaitgetType => response", response)
 
 
         if (response.result.length > 0) {

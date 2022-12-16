@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 22:52:35
- * @LastEditTime: 2022-12-14 23:45:18
+ * @LastEditTime: 2022-12-16 19:44:32
  * @LastEditors: you name
  * @Description: 
 -->
@@ -17,7 +17,6 @@
         :style="{ paddingTop: statusBarHeight + 'px' }"
       ></view>
       <!-- 真正的导航栏内容 -->
-
       <view class="navBar pt-1">
         <text
           class="iconfont z-10 bg-black bg-opacity-30 rounded-full w-8 h-8 flex justify-center items-center text-white text-3xl"
@@ -73,8 +72,19 @@
         <view
           class="bg-Bluck text-goldenFont text-xs flex justify-between items-center p-4 py-3 rounded-t-xl"
         >
-          <text class="">Lucky you~跟幸运打个招呼</text>
+
+          <view class="flex items-center">
+            <image
+              v-if="userImg"
+              :src="userImg"
+              class="w-8 h-8 rounded-full mr-1 bg-white"
+            >
+            </image>
+            <text>Lucky you~跟幸运打个招呼</text>
+          </view>
+          <text v-if="name">{{name}}</text>
           <text
+            v-else
             class="bg-goldenFont text-black px-2 py-1 rounded-full"
             @click="goLogin"
           >登录/注册</text>
@@ -158,45 +168,17 @@
           activeColor="#0f0f99"
         ></uni-segmented-control>
 
-        <!-- <view class="flex">
-        
-            <view class="flex-1 text-center tabItem"  v-for="(item , index) in tabData"
-            :key="index">
-              {{item}}
-            
-          </view>
-
-        </view> -->
-
         <view class="content py-3">
           <view
-            v-show="tabCurrent === 0"
-            class="grid grid-cols-2 gap-3"
+            v-show="tabCurrent === tabIndex"
+            v-for="(tabItem,tabIndex) in tab"
+            :key="tabIndex"
           >
-            <view
-              v-for="(productItem, productIndex) in productList"
-              :key="productIndex"
-              class="flex flex-col rounded-xl bg-white overflow-hidden"
-              @click="goProductInfo(productItem.pid)"
-            >
-              <!-- {{productItem}} -->
-              <image
-                :src="productItem.smallImg"
-                class="w-full h-44 "
-                mode="aspectFill"
-              ></image>
-              <text class="px-2 py-1">{{productItem.name}}</text>
-              <text class="px-2 py-1">{{productItem.price}}</text>
-            </view>
-          </view>
-          <view v-show="tabCurrent === 1">
-            选项卡2的内容
-          </view>
-          <view v-show="tabCurrent === 2">
-            选项卡3的内容
+            <tab :productList="productList" />
           </view>
         </view>
       </view>
+      <!-- tabber end -->
 
     </view>
     <!-- <text>{{errorlog}}</text> -->
@@ -204,7 +186,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getBanner, getProductList } from '@/api/home'
+import tab from './components/tabProductList.vue'
 export default {
   name: 'home',
   data () {
@@ -236,38 +220,66 @@ export default {
       duration: 500,//滑动动画时长
       circular: true,//是否采用衔接滑动，即播放到末尾后重新回到开头
       tabCurrent: 0,
-      tabData: ['热门推荐', '选项12', '选项13'],
-      productList: []
+      tabData: [],
+      productList: [],
+      tab: [
+        { key: "isHot", value: 1, name: "热门推荐" },
+        { key: "type", value: "coffee", name: "咖啡" },
+        { key: "type", value: "latte", name: "拿铁" },
+        { key: "type", value: "fruit_tea", name: "水果茶" }
+      ]
     }
 
   },
-  // components: { uniIcons },
+  components: { tab },
+  computed: {
+    ...mapGetters(['name', 'userImg'])
+  },
+
+  onReady () {
+  },
   onLoad () {
     this.getData()
   },
-  // 第一次加载时调用
-  created () {
-    //获取手机状态栏高度
-    this.statusBarHeight = uni.getSystemInfoSync()['statusBarHeight']
-    console.log('created => this.statusBarHeight', this.statusBarHeight)
 
-  },
   methods: {
+    setNavigationHeight () {
+      //获取手机状态栏高度
+      this.statusBarHeight = uni.getSystemInfoSync()['statusBarHeight']
+      console.log('created => this.statusBarHeight', this.statusBarHeight)
+    },
     getData () {
+      this.setNavigationHeight()
+
       getBanner().then(response => {
         this.swiperList = response.result
       })
 
-      let params = { key: 'isHot', value: 1 }
-      getProductList(params).then(response => {
+      // setTimeout(() => {
+      // }, 1000)
+
+      this.tab.forEach(item => {
+        this.tabData.push(item.name)
+
+      })
+
+      this.getTabProductList(0)
+
+
+    },
+
+    // 获取 tab 里的商品列表
+    getTabProductList (index) {
+      getProductList(this.tab[index]).then(response => {
         this.productList = response.result
-        console.log("getHotProduct => this.productList", this.productList)
       })
     },
+
     change (e) {
       this.swiperCurrent = e.detail.current
     },
     onClickItem (e) {
+      this.getTabProductList(e.currentIndex)
       if (this.tabCurrent != e.currentIndex) {
         this.tabCurrent = e.currentIndex
       }

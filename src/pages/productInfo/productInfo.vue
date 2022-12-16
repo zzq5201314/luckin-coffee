@@ -1,18 +1,32 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-14 23:39:38
+ * @LastEditTime: 2022-12-16 19:37:59
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- productInfo 页 -->
 <template>
   <view class="productInfo">
-    <!-- <image
-      :src="productData.large_img"
-      class="w-full h-80"
-      mode="aspectFill"
-    ></image> -->
+
+    <!-- 自定义导航栏 -->
+    <view class="navBarBox absolute top-0 px-4 z-10">
+      <!-- 状态栏占位 -->
+      <view
+        class="statusBar"
+        :style="{ paddingTop: statusBarHeight + 'px' }"
+      ></view>
+      <!-- 真正的导航栏内容 -->
+
+      <view class="navBar pt-1">
+        <text
+          class="iconfont z-10 bg-white bg-opacity-60 rounded-full w-8 h-8 flex justify-center items-center text-black text-3xl"
+          @click="back"
+        >
+          &#xe685;</text>
+        <!-- <view>我是导航栏标题</view> -->
+      </view>
+    </view>
 
     <swiper
       indicator-dots="true"
@@ -33,11 +47,12 @@
       </swiper-item>
     </swiper>
     <view class="p-3 pt-0 relative">
-      <text class="text-lg">{{productData.name}}</text>
+      <text class="text-lg pt-2 block">{{productData.name}}</text>
       <view class="absolute right-0 top-0 flex flex-col text-center -mt-4 mr-3">
         <view>
           <text
-            class="iconfont text-3xl bg-white rounded-full p-2">&#xe7df;</text>
+            class="iconfont text-3xl bg-white rounded-full p-2 text-gray-500"
+          >&#xe7df;</text>
         </view>
         <text class="text-sm">收藏口味</text>
       </view>
@@ -63,7 +78,7 @@
       </view>
     </view>
 
-    <view class="p-3 bg-gray-100 min-h-screen">
+    <view class="p-3 bg-gray-100 ">
       <view class="bg-white p-1 px-2 rounded-md">
         <text class="text-lg">商品详情</text>
 
@@ -76,9 +91,11 @@
         </view>
 
       </view>
+
+      <view :style="{height:tabberHeight+'px'}"></view>
     </view>
 
-    <view class="goods-carts fixed bottom-0 left-0 right-0 bg-white">
+    <view class="tabber fixed bottom-0 left-0 right-0 bg-white">
       <view class="px-4 py-2 h-full">
 
         <view class="flex justify-between mb-3 tracking-tighter">
@@ -123,18 +140,37 @@ export default {
   name: "productInfo",
   data () {
     return {
+      // 状态栏高度
+      statusBarHeight: 0,
       productId: this.$Route.query.productId,
       productData: {},
-      num: 1
+      num: 1,
+      tabberHeight: 0
     }
   },
   components: {},
+  onReady () {
 
+    //获取手机状态栏高度
+    this.statusBarHeight = uni.getSystemInfoSync()['statusBarHeight']
+
+    uni.getSystemInfo({
+      success: (res) => {
+        console.log("created => res", res)
+        let tabbar = uni.createSelectorQuery().select('.tabber')
+        tabbar.boundingClientRect((data) => {
+          // console.log(data);
+          this.tabberHeight = data.height
+          console.log("tabbar.boundingClientRect => this.tabberHeight", this.tabberHeight)
+        }).exec()
+      }
+    })
+    this.getData()
+
+  },
   onLoad () {
     this.productId = this.$Route.query.productId
-    console.log("onLoad => this.$Route.query", this.$Route.query)
-    // console.log("onLoad => this.$Route.query", this.$Route)
-    this.getData()
+
 
 
   },
@@ -142,7 +178,7 @@ export default {
   methods: {
     getData () {
       getProductInfo({ pid: this.productId }).then(response => {
-        // console.log("getProductInfo => response", response)
+        console.log("getProductInfo => response", response)
         const data = response.result[0]
         // 裁剪
         data.desc = data.desc.split('\n')
@@ -208,6 +244,10 @@ export default {
     selectRules (item, index) {
       console.log("selectRules => item", item)
       item.acticeIndex = index
+    },
+
+    back () {
+      this.$Router.back(1)
     }
   }
 }
@@ -235,7 +275,7 @@ v-deep .uni-swiper-dot-active {
 }
 
 // ios底部安全距离-padding
-.goods-carts {
+.tabber {
   // padding-bottom: constant(safe-area-inset-bottom);
   // padding-bottom: env(safe-area-inset-bottom);
   box-sizing: content-box;

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-15 22:02:24
- * @LastEditTime: 2022-12-16 00:08:36
+ * @LastEditTime: 2022-12-16 19:51:15
  * @LastEditors: you name
  * @Description:
  */
@@ -55,6 +55,7 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			getUserInfo().then(response => {
 				const { nickName, userImg } = response.result[0]
+				console.log("getUserInfo => response.result[0]", response.result[0])
 				commit('SET_NAME', nickName)
 				commit('SET_USER_IMG', userImg)
 			})

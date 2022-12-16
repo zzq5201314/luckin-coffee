@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-10 01:52:49
- * @LastEditTime: 2022-12-14 21:30:20
+ * @LastEditTime: 2022-12-16 23:08:40
  * @LastEditors: you name
  * @Description: 
  */
@@ -33,6 +33,10 @@ module.exports = {
         'selectText': '#0022ab',
         'selectBG': '#eaeeff',
       },
+
+    },
+
+    fontFamily: {
 
     },
 
