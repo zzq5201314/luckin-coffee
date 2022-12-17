@@ -1,39 +1,44 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-17 23:32:12
+ * @LastEditTime: 2022-12-18 00:49:10
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- menu 页 -->
 <template>
-  <view class="menu fixed w-full">
+  <view
+    class="menuContent w-full"
+    :style="{height:contentHeight+'px'}"
+  >
 
-    <view class="">
-      <input
-        class="mx-10 bg-gray-100 rounded-full mb-2 h-8 py-2 px-6"
-        type="text"
-        placeholder="搜索框"
-      >
-    </view>
+    <view class=" bg-bgColor ">
 
-    <!-- 显示图标 -->
-    <view class="mx-3 my-4">
-      <uni-notice-bar
-        single
-        background-color="#f4f7fc"
-        color="#183df2"
-        showIcon="true"
-        text="[多行] 这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏"
-      >
-      </uni-notice-bar>
-    </view>
+      <view class="bg-white header">
+        <view class="">
+          <input
+            class="mx-10 bg-gray-100 rounded-full mb-2 h-8 py-2 px-6"
+            type="text"
+            placeholder="搜索框"
+          >
+        </view>
 
-    <view class=" py-3 pb-6 bg-bgColor ">
+        <!-- 通知 -->
+        <view class="mx-3 py-2 ">
+          <uni-notice-bar
+            single
+            background-color="#f4f7fc"
+            color="#183df2"
+            showIcon="true"
+            text="[多行] 这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏"
+          >
+          </uni-notice-bar>
+        </view>
+      </view>
 
-      <view class="content flex ">
-        <view class="left overflow-y-scroll ">
-          <view class="demo-uni-col text-sm category-bar">
+      <view class="content flex">
+        <view class="left overflow-y-scroll mt-2 ">
+          <view class=" text-sm category-bar">
             <view
               v-for="(categoryItem , categoryIndex) in categoryList"
               :key="categoryIndex"
@@ -56,15 +61,16 @@
 
         <!-- 侧边栏 end -->
 
-        <view class="right ">
+        <view class="right h-full  ">
           <scroll-view
-            class="product demo-uni-col  min-h-screen  h-screen "
+            class="product "
+            :style="{height:menuHeight+ 'px'}"
             scroll-y
             @scroll="scroll"
             scroll-with-animation
             :scroll-top="scrollRightTop"
           >
-            <view class="pb-48 mr-2 ">
+            <view class=" mr-2 mt-2">
               <view
                 v-for="(categoryItem , categoryIndex) in categoryList"
                 :key="categoryIndex"
@@ -97,7 +103,13 @@
 
             </view>
 
+            <view
+              :style="{height:shopCartHeight+'px'}"
+              class="w-full"
+            >
+            </view>
           </scroll-view>
+
         </view>
         <!-- 商品栏 end -->
 
@@ -105,13 +117,8 @@
 
     </view>
 
-    <view
-      class="fixed right-0 pb-2 px-4  "
-      :style="{bottom:tabberHeight+'px',width:windowWidth+'px'}"
-    >
-      <view
-        class="flex w-full bg-white items-center rounded-full overflow-hidden"
-      >
+    <view class="absolute right-0 left-0 pb-2 px-4 shopCart bottom-0">
+      <view class="flex  bg-white items-center rounded-full overflow-hidden">
         <view class="relative p-2 px-4">
           <text class="iconfont text-5xl">&#xe621;</text>
           <text
@@ -141,17 +148,18 @@ import { getProductList } from '@/api/home'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 export default {
-  name: "menu",
+  // name: "menu",
   data () {
     return {
       categoryList: [],
       scrollTop: 0,
-      current: 0,         //左边分类栏当前的选中的项
-      rightScrollArr: [], //右边栏每项高度组成的数组
-      scrollRightTop: 0,   //当前右边栏滚动的高度
-      shopCartUnfold: false, // 购物车图标是否展开
-      tabberHeight: 0,
-      windowWidth: 0
+      current: 0,             //左边分类栏当前的选中的项
+      rightScrollArr: [],     //右边栏每项高度组成的数组
+      scrollRightTop: 0,      //当前右边栏滚动的高度
+      shopCartUnfold: false,  // 购物车图标是否展开
+      shopCartHeight: 0,      // 购物车卡片高度
+      menuHeight: 0,          // 菜单 高度
+      contentHeight: 0        // 内容 高度
     }
   },
   components: {},
@@ -172,9 +180,21 @@ export default {
     uni.getSystemInfo({
       success: (res) => {
         console.log("onReady => res", res)
-        this.tabberHeight = res.windowBottom
-        this.windowWidth = res.windowWidth
-        // let tabber = uni.createSelectorQuery().select('')
+        this.contentHeight = res.windowHeight
+        let shopCart = uni.createSelectorQuery().select('.shopCart')
+        let header = uni.createSelectorQuery().select('.header')
+
+        // 获取购物车样式
+        shopCart.boundingClientRect((data) => {
+          this.shopCartHeight = data.height
+        }).exec()
+
+        // 获取头部样式
+        header.boundingClientRect((data) => {
+          // 菜单（左右联动）高度 = 视窗高度 - 头部高度（搜索、通知的头部白色区域） 
+          this.menuHeight = res.windowHeight - data.height
+
+        }).exec()
       }
     })
   },
@@ -273,7 +293,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
-.menu {
+.menuContent {
   height: 100%;
 }
 
