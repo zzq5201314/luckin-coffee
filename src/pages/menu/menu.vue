@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-16 18:21:57
+ * @LastEditTime: 2022-12-17 23:32:12
  * @LastEditors: you name
  * @Description: 
 -->
@@ -78,6 +78,7 @@
                   v-for="(productItem,productIndex) in categoryItem.productList"
                   :key="productIndex"
                   class="flex py-2"
+                  @click="goProductInfo(productItem.pid)"
                 >
                   <image
                     :src="productItem.largeImg"
@@ -104,12 +105,41 @@
 
     </view>
 
+    <view
+      class="fixed right-0 pb-2 px-4  "
+      :style="{bottom:tabberHeight+'px',width:windowWidth+'px'}"
+    >
+      <view
+        class="flex w-full bg-white items-center rounded-full overflow-hidden"
+      >
+        <view class="relative p-2 px-4">
+          <text class="iconfont text-5xl">&#xe621;</text>
+          <text
+            class="absolute top-2 right-4 bg-selectText text-white w-6 h-6 rounded-full flex items-center justify-center border-solid border border-white"
+          >{{shopCartSum}}</text>
+        </view>
+        <view class="flex flex-col flex-1 px-2">
+          <text class="text-lg">预计到手<text
+              class="text-orange-600 font-semibold text-xl"
+            >
+              <text class="text-sm">¥</text>
+              {{shopCartMoney}}</text></text>
+          <text class="text-xs text-gray-500">已享受更低优惠</text>
+        </view>
+        <view class="bg-selectText text-white p-4 font-bold text-lg">
+          去结算
+        </view>
+      </view>
+    </view>
+
   </view>
 </template>
 
 <script>
 import { getType } from "@/api/menu"
 import { getProductList } from '@/api/home'
+import { getToken } from '@/utils/auth'
+import { mapGetters } from 'vuex'
 export default {
   name: "menu",
   data () {
@@ -117,20 +147,36 @@ export default {
       categoryList: [],
       scrollTop: 0,
       current: 0,         //左边分类栏当前的选中的项
-
       rightScrollArr: [], //右边栏每项高度组成的数组
-      scrollRightTop: 0   //当前右边栏滚动的高度
+      scrollRightTop: 0,   //当前右边栏滚动的高度
+      shopCartUnfold: false, // 购物车图标是否展开
+      tabberHeight: 0,
+      windowWidth: 0
     }
   },
   components: {},
-
+  computed: {
+    ...mapGetters(['shopCartSum', 'shopCartMoney'])
+  },
   onLoad () {
+    // 先获取到数据，再计算右边栏每项高度组成的数组
     this.getData().then(() => {
       this.getCateItemTop()
+      let token = getToken()
+      if (token) {
+        this.$store.dispatch('shopCart/getShopCartData')
+      }
     })
   },
   onReady () {
-
+    uni.getSystemInfo({
+      success: (res) => {
+        console.log("onReady => res", res)
+        this.tabberHeight = res.windowBottom
+        this.windowWidth = res.windowWidth
+        // let tabber = uni.createSelectorQuery().select('')
+      }
+    })
   },
   // 函数
   methods: {
@@ -169,6 +215,10 @@ export default {
 
     },
     scroll (event) {
+      if (this.shopCartSum == 0) {
+        this.shopCartUnfold = false
+      }
+
       // console.log("scroll => event", event)
       // 传入scrollTop值并触发所有easy-loadimage组件下的滚动监听事件
       let scrollTop = event.detail.scrollTop;//这里的detail里有多个数据，可打印出来，根据需要使用
@@ -207,8 +257,13 @@ export default {
       })
     },
 
-
-
+    // 跳转商品详情页
+    goProductInfo (id) {
+      this.$Router.push({
+        path: '/pages/productInfo/productInfo',
+        query: { productId: id },
+      })
+    },
 
 
 

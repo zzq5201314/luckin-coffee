@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-15 22:02:24
- * @LastEditTime: 2022-12-16 19:51:15
+ * @LastEditTime: 2022-12-17 16:55:42
  * @LastEditors: you name
  * @Description:
  */
@@ -58,7 +58,10 @@ const actions = {
 				console.log("getUserInfo => response.result[0]", response.result[0])
 				commit('SET_NAME', nickName)
 				commit('SET_USER_IMG', userImg)
+				resolve()
 			})
+
+
 		})
 	}
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 23:20:43
- * @LastEditTime: 2022-12-17 01:24:21
+ * @LastEditTime: 2022-12-17 16:06:51
  * @LastEditors: you name
  * @Description: 
 -->
@@ -37,18 +37,18 @@
           >欢迎~Luckin新便宜</view>
           <view class="flex justify-between items-center mt-2">
             <text class="text-2xl">0</text>
-            <myLink
+            <view
               class="text-xs text-gray-600 iconfont"
               v-if="name"
-              :to="{path:'/pages/menu/menu'}"
+              @click="routerGo('/pages/menu/menu')"
             >已为您保级30天，去冲刺&#xe605;
-            </myLink>
-            <myLink
+            </view>
+            <view
               class="text-xs text-gray-600 iconfont"
               v-else
-              :to="{path:'/pages/login/login'}"
+              @click="routerGo('/pages/login/login')"
             >去喝一杯加入Luckin&#xe605;
-            </myLink>
+            </view>
           </view>
           <view class="bg-gray-100 h-1 w-full rounded-full"></view>
         </view>
@@ -165,6 +165,11 @@ export default {
     },
     unfold () {
       this.isUnfold = !this.isUnfold
+    },
+    routerGo (path) {
+      this.$Router.pushTab({
+        path
+      })
     }
   }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-11 16:40:26
- * @LastEditTime: 2022-12-16 19:03:55
+ * @LastEditTime: 2022-12-17 22:00:29
  * @LastEditors: you name
  * @Description: 
  */
@@ -9,6 +9,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs';
+import { router } from '../router'
 
 // create an axios instance
 const service = axios.create({
@@ -48,9 +49,23 @@ service.interceptors.request.use(
 //配置成功后的拦截器
 service.interceptors.response.use(res => {
 	// console.log("res", res)
-	if (res.status == 200) {
+	if (res.data.msg == 'token检验无效，请先登录') {
+		uni.showToast({
+			title: '请登录',
+			duration: 2000,
+			icon: 'none'
+		})
+
+		setTimeout(() => {
+			router.push({ name: 'login' })
+		}, 500)
+
+
+		return Promise.reject(res.data.msg)
+	} else if (res.status == 200) {
 		return res.data
 	} else {
+
 		return Promise.reject(res.data.msg);
 	}
 }, error => {

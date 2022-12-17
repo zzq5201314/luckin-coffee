@@ -1,13 +1,13 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-16 19:37:59
+ * @LastEditTime: 2022-12-17 22:01:14
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- productInfo 页 -->
 <template>
-  <view class="productInfo">
+  <view class="productInfo ">
 
     <!-- 自定义导航栏 -->
     <view class="navBarBox absolute top-0 px-4 z-10">
@@ -48,13 +48,16 @@
     </swiper>
     <view class="p-3 pt-0 relative">
       <text class="text-lg pt-2 block">{{productData.name}}</text>
-      <view class="absolute right-0 top-0 flex flex-col text-center -mt-4 mr-3">
-        <view>
+      <view
+        class="absolute right-0 top-0 flex flex-col text-center -mt-4 mr-3 w-14"
+      >
+        <view @click="likeProduct(productData.pid)">
           <text
             class="iconfont text-3xl bg-white rounded-full p-2 text-gray-500"
-          >&#xe7df;</text>
+            :class="{'text-red-500':isLike}"
+          >{{isLike?'&#xe851;':'&#xe7df;'}}</text>
         </view>
-        <text class="text-sm">收藏口味</text>
+        <text class="text-sm">{{isLike?'已收藏':'收藏口味'}}</text>
       </view>
 
       <view class="mt-3">
@@ -71,6 +74,7 @@
               :key="keyIndex"
               @click="selectRules(rulesItem,keyIndex)"
               class=" py-2 bg-gray-50 rounded-md text-center border border-gray-50 text-gray-600 border-solid"
+              :class="[{actice:(rulesItem.acticeIndex==keyIndex)}]"
             >{{keyItem.key}}</text>
 
           </view>
@@ -78,7 +82,7 @@
       </view>
     </view>
 
-    <view class="p-3 bg-gray-100 ">
+    <view class="p-3 bg-gray-100">
       <view class="bg-white p-1 px-2 rounded-md">
         <text class="text-lg">商品详情</text>
 
@@ -120,6 +124,7 @@
           >立即购买</text>
           <text
             class="border rounded-full py-2 border-solid bg-selectText text-white border-selectText"
+            @click="addShopCart"
           >加入购物车</text>
         </view>
       </view>
@@ -133,9 +138,9 @@
 </template>
 
 <script>
-import { getProductInfo } from '@/api/productInfo'
+import { getProductInfo, likeProduct, findLike, notLike, addShopCart } from '@/api/productInfo'
 import { _throttle, _debounce } from '@/utils/fn'
-
+import { getToken } from '@/utils/auth'
 export default {
   name: "productInfo",
   data () {
@@ -145,7 +150,8 @@ export default {
       productId: this.$Route.query.productId,
       productData: {},
       num: 1,
-      tabberHeight: 0
+      tabberHeight: 0,
+      isLike: false
     }
   },
   components: {},
@@ -166,7 +172,6 @@ export default {
       }
     })
     this.getData()
-
   },
   onLoad () {
     this.productId = this.$Route.query.productId
@@ -176,9 +181,21 @@ export default {
   },
   // 函数
   methods: {
+
     getData () {
-      getProductInfo({ pid: this.productId }).then(response => {
-        console.log("getProductInfo => response", response)
+
+      this.getProductData()
+
+      // 获取token
+      let token = getToken()
+      if (token) {
+        this.findLike()
+      }
+    },
+
+    // 获取商品详情
+    async getProductData () {
+      await getProductInfo({ pid: this.productId }).then(response => {
         const data = response.result[0]
         // 裁剪
         data.desc = data.desc.split('\n')
@@ -219,8 +236,18 @@ export default {
 
 
       })
+    },
 
-
+    // 查询是否添加收藏
+    async findLike () {
+      await findLike(this.productId).then(response => {
+        // console.log("findLike => response", response)
+        if (response.result.length > 0) {
+          this.isLike = true
+        } else {
+          this.isLike = false
+        }
+      })
     },
 
     // 减
@@ -246,8 +273,53 @@ export default {
       item.acticeIndex = index
     },
 
+    // 返回
     back () {
       this.$Router.back(1)
+    },
+
+    // 收藏商品
+    likeProduct (id) {
+      if (this.isLike === true) {
+        // 取消收藏
+        notLike(id).then(response => {
+          // console.log("notLike => response", response.msg)
+          this.findLike()
+        })
+
+      } else {
+        // 添加收藏
+        likeProduct(id).then(response => {
+          // console.log("likeProduct => response", response.msg)
+          this.findLike()
+        })
+
+      }
+
+    },
+
+    // 添加购物车
+    addShopCart () {
+      let arr = []
+      this.productData.productRules.forEach(i => {
+        arr.push(i.ruleItem[i.acticeIndex].key)
+      })
+      let data = {
+        count: this.num,
+        pid: this.productData.pid,
+        rule: arr.join('/')
+      }
+      addShopCart(data).then(response => {
+        if (response.code == 3000) {
+          uni.showToast({
+            title: response.msg,
+            icon: 'none'
+          })
+          setTimeout(() => {
+            this.$Router.back(1)
+          }, 500)
+        }
+      })
     }
   }
 }

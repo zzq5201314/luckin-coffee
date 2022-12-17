@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-14 23:42:30
- * @LastEditTime: 2022-12-17 01:06:40
+ * @LastEditTime: 2022-12-17 17:16:45
  * @LastEditors: you name
  * @Description: 登录页
 -->
@@ -21,6 +21,7 @@
       <view class="navBar pt-1">
         <text
           class="iconfont z-10 bg-white bg-opacity-70 rounded-full w-8 h-8 flex justify-center items-center text-black text-xl"
+          @click="back"
         > &#xe601;</text>
         <!-- <view>我是导航栏标题</view> -->
       </view>
@@ -109,8 +110,15 @@ export default {
         password: this.password
       }
       this.$store.dispatch('user/login', data).then(() => {
-        this.$store.dispatch('user/getUserInfo')
+        this.$store.dispatch('user/getUserInfo').then(() => {
+          console.log('准备返回');
+          this.$Router.back(1)
+        })
       })
+    },
+
+    back () {
+      this.$Router.back(1)
     }
   }
 }
