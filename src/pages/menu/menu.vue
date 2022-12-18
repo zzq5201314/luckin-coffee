@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-18 00:49:10
+ * @LastEditTime: 2022-12-19 01:04:59
  * @LastEditors: you name
  * @Description: 
 -->
@@ -42,8 +42,8 @@
             <view
               v-for="(categoryItem , categoryIndex) in categoryList"
               :key="categoryIndex"
-              @click="switchCate(categoryIndex)"
-              class="py-2 mb-2 flex items-center  rounded-r-full mr-2 "
+              @click="selectCate(categoryIndex)"
+              class="py-3 mb-2 flex items-center  rounded-r-full mr-2 "
               :class="{rounded:categoryIndex==current}"
             >
               <!-- :class="[categoryIndex==activeKey?'opacity-100':'']" -->
@@ -95,14 +95,32 @@
                     <text class=" py-1">{{productItem.name}}</text>
                     <text
                       class="info text-xs text-gray-500">{{productItem.desc}}</text>
-                    <text
-                      class="text-orange-500 tracking-tighter">{{productItem.price}}</text>
+                    <view class="flex justify-between mt-3 items-center ">
+                      <text
+                        class="text-orange-500 tracking-tighter">{{productItem.price}}</text>
+                      <view class="relative">
+                        <text
+                          class="iconfont bg-selectText text-white rounded-full w-6 h-6 flex items-center  justify-center"
+                        >&#xe62d;</text>
+                        <text
+                          v-for="(numItem,numIndex) in numSelectList"
+                          :key=numIndex
+                        >
+                          <text
+                            v-if="numItem.pid == productItem.pid"
+                            class="absolute top-0 right-0 -mt-3 -mr-2  flex justify-center items-center rounded-full bg-orange-300 w-5 h-5 border-white border border-solid text-white"
+                          >{{numItem.count}}</text>
+                        </text>
+                      </view>
+                    </view>
                   </view>
                 </view>
               </view>
 
             </view>
-
+            <text
+              class="w-full flex justify-center text-xs text-gray-400 mb-3">我也是有底线的</text>
+            <!-- 占位 （用于把商品全部显示出来） -->
             <view
               :style="{height:shopCartHeight+'px'}"
               class="w-full"
@@ -117,28 +135,87 @@
 
     </view>
 
-    <view class="absolute right-0 left-0 pb-2 px-4 shopCart bottom-0">
-      <view class="flex  bg-white items-center rounded-full overflow-hidden">
-        <view class="relative p-2 px-4">
+    <view
+      class="fixed right-2 pb-2 shopCartAnimation z-50"
+      :style="{width:windowWidth+ 'px',bottom:tabberHeight+ 'px'}"
+    >
+      <view
+        class="flex bg-white items-center rounded-full overflow-hidden shadow-xl shopCartAnimation w-20 h-full"
+        :class="{'w-full':shopCartUnfold}"
+      >
+        <view
+          class="relative px-4 py-1 z-10 shopCart"
+          @click="openShopCart"
+        >
           <text class="iconfont text-5xl">&#xe621;</text>
           <text
-            class="absolute top-2 right-4 bg-selectText text-white w-6 h-6 rounded-full flex items-center justify-center border-solid border border-white"
+            class="absolute top-0 right-4 bg-selectText text-white w-6 h-6 rounded-full flex items-center justify-center border-solid border border-white"
           >{{shopCartSum}}</text>
+
+          <!-- 展开按钮   -->
+          <view
+            class="absolute top-0 left-0 right-0 bottom-0 bg-white z-20 opacity-0"
+            v-if="!shopCartUnfold"
+            @click="unfoldCapsule()"
+          >
+          </view>
+
         </view>
-        <view class="flex flex-col flex-1 px-2">
+        <!-- 已加购 数量、购物车logo end -->
+
+        <view
+          class="flex flex-col flex-1 px-2 py-1 overflow-hidden whitespace-nowrap "
+          :class="{'hidden':!shopCartUnfold}"
+          @click="openShopCart"
+        >
           <text class="text-lg">预计到手<text
               class="text-orange-600 font-semibold text-xl"
             >
               <text class="text-sm">¥</text>
               {{shopCartMoney}}</text></text>
-          <text class="text-xs text-gray-500">已享受更低优惠</text>
+          <!-- <text class="text-xs text-gray-500">已享受更低优惠</text> -->
         </view>
-        <view class="bg-selectText text-white p-4 font-bold text-lg">
-          去结算
+        <!-- 价格显示 end -->
+
+        <view
+          class="bg-selectText text-white px-5  font-bold h-14 flex items-center justify-center"
+          :class="{'hidden':!shopCartUnfold,'bg-opacity-60':(shopCartSum==0)}"
+        >
+          {{shopCartSum>0?"去结算":"不可结算"}}
         </view>
+        <!-- 结算按钮 end -->
       </view>
+
     </view>
 
+    <!-- 普通弹窗 -->
+
+    <popup
+      :show="popupShow"
+      @show="showClick"
+    >
+      <view class="bg-white max-h-96">
+        <view class="flex justify-between px-5 py-2">
+          <view>
+            <text>选择</text>
+            <text>已选购商品（1件）</text>
+          </view>
+          <view>清空购物车</view>
+        </view>
+        <!-- title end -->
+
+        <view class="px-5 py-2 border-t border-solid border-gray-100 pb-6">
+          商品内容
+        </view>
+
+        <!-- 占位 -->
+        <view
+          :style="{height:(shopCartHeight+tabberHeight)+'px'}"
+          class="w-full"
+        ></view>
+
+      </view>
+    </popup>
   </view>
 </template>
 
@@ -147,12 +224,16 @@ import { getType } from "@/api/menu"
 import { getProductList } from '@/api/home'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
+import popup from './components/popup'
 export default {
   // name: "menu",
   data () {
     return {
       categoryList: [],
       scrollTop: 0,
+      windowWidth: 0,
+      popupShow: false,
+      tabberHeight: 0,
       current: 0,             //左边分类栏当前的选中的项
       rightScrollArr: [],     //右边栏每项高度组成的数组
       scrollRightTop: 0,      //当前右边栏滚动的高度
@@ -162,18 +243,22 @@ export default {
       contentHeight: 0        // 内容 高度
     }
   },
-  components: {},
+  components: { popup },
   computed: {
-    ...mapGetters(['shopCartSum', 'shopCartMoney'])
+    ...mapGetters(['shopCartSum', 'shopCartMoney', 'shopCartList', 'numSelectList'])
   },
   onLoad () {
     // 先获取到数据，再计算右边栏每项高度组成的数组
     this.getData().then(() => {
       this.getCateItemTop()
       let token = getToken()
-      if (token) {
-        this.$store.dispatch('shopCart/getShopCartData')
+      if (token && this.shopCartSum > 0) {
+        // this.$store.dispatch('shopCart/getShopCartData')
+        this.unfoldCapsule(true)
+      } else {
+        this.unfoldCapsule(false)
       }
+
     })
   },
   onReady () {
@@ -181,6 +266,7 @@ export default {
       success: (res) => {
         console.log("onReady => res", res)
         this.contentHeight = res.windowHeight
+        this.tabberHeight = res.windowBottom
         let shopCart = uni.createSelectorQuery().select('.shopCart')
         let header = uni.createSelectorQuery().select('.header')
 
@@ -200,6 +286,16 @@ export default {
   },
   // 函数
   methods: {
+
+    showClick (e) {
+      // console.log("showClick => e", e)
+      this.popupShow = e
+    },
+
+    change (e) {
+      this.show = e.show
+    },
+
     async getData () {
 
       let data = []
@@ -234,9 +330,12 @@ export default {
 
 
     },
+
+
     scroll (event) {
+      // 如果购物车是空的 关闭 购物车胶囊
       if (this.shopCartSum == 0) {
-        this.shopCartUnfold = false
+        this.unfoldCapsule(false)
       }
 
       // console.log("scroll => event", event)
@@ -244,18 +343,16 @@ export default {
       let scrollTop = event.detail.scrollTop;//这里的detail里有多个数据，可打印出来，根据需要使用
       // console.log("scroll => scrollTop", scrollTop)
 
-
       for (var i in this.rightScrollArr) {
 
         if (this.rightScrollArr[i] - 8 < scrollTop) {
           this.current = i
         }
 
-
       }
     },
 
-    async switchCate (index) {
+    async selectCate (index) {
 
       if (index === this.current) return;
       //将右边的scroll高度重设
@@ -285,6 +382,54 @@ export default {
       })
     },
 
+    // 展开购物车胶囊
+    unfoldCapsule (type) {
+      // type : true 需要打开  false 需要关闭
+      if (type == true) {       // 展开
+        this.shopCartUnfold = true
+        uni.getSystemInfo({
+          success: (res) => {
+            this.windowWidth = res.windowWidth - 16
+          }
+        })
+
+        return
+      } else if (type == false) {   // 收起
+        this.shopCartUnfold = false
+        uni.getSystemInfo({
+          success: (res) => {
+            this.windowWidth = res.windowWidth - 16
+          }
+        })
+
+        let shopCart = uni.createSelectorQuery()
+        shopCart.select('.shopCart').boundingClientRect((data) => {
+          let _a = this.windowWidth - data.width
+          this.windowWidth = this.windowWidth - _a
+        }).exec()
+
+        return
+      }
+
+    },
+
+    // 打开购物车
+    openShopCart () {
+
+      if (this.shopCartUnfold == false) {
+        this.unfoldCapsule(true)
+        return;
+      }
+
+      if (this.shopCartSum == 0) {
+        uni.showToast({
+          title: '请添加商品'
+        })
+      }
+      else {
+        this.popupShow = !this.popupShow
+      }
+    }
 
 
 
@@ -295,6 +440,10 @@ export default {
 /* @import url(); 引入css类 */
 .menuContent {
   height: 100%;
+
+  .shopCartAnimation {
+    transition: 0.2s;
+  }
 }
 
 .content {

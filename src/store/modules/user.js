@@ -1,14 +1,14 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-15 22:02:24
- * @LastEditTime: 2022-12-17 16:55:42
+ * @LastEditTime: 2022-12-19 00:22:35
  * @LastEditors: you name
  * @Description:
  */
 import { getToken, setToken, removeToken } from '@/utils/auth'
-
 import { login } from '@/api/login'
 import { getUserInfo } from '@/api/user'
+import store from '../index'
 
 const getDefaultState = () => {
 	return {
@@ -55,9 +55,11 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			getUserInfo().then(response => {
 				const { nickName, userImg } = response.result[0]
-				console.log("getUserInfo => response.result[0]", response.result[0])
+				// console.log("getUserInfo => response.result[0]", response.result[0])
+				// 获取购物车数据
 				commit('SET_NAME', nickName)
 				commit('SET_USER_IMG', userImg)
+				store.dispatch('shopCart/getShopCartData')
 				resolve()
 			})
 

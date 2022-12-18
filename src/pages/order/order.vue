@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-17 21:29:00
+ * @LastEditTime: 2022-12-18 00:55:49
  * @LastEditors: you name
  * @Description: 
 -->
@@ -12,7 +12,7 @@
       class="grid grid-cols-3 gap-3 text-center bg-selectText text-white border-2 border-solid border-selectText rounded-full text-lg"
     >
       <text
-        class="rounded-full py-2 "
+        class="rounded-full py-1 "
         v-for="(item,index) in tabberItems"
         :key="index"
         :class="{'bg-white':(activeTabber==index),'text-selectText':(activeTabber==index)}"

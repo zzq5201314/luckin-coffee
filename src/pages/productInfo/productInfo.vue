@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-17 22:01:14
+ * @LastEditTime: 2022-12-18 15:18:25
  * @LastEditors: you name
  * @Description: 
 -->
@@ -301,6 +301,7 @@ export default {
     // 添加购物车
     addShopCart () {
       let arr = []
+      // 循环遍历出规格
       this.productData.productRules.forEach(i => {
         arr.push(i.ruleItem[i.acticeIndex].key)
       })
@@ -309,12 +310,16 @@ export default {
         pid: this.productData.pid,
         rule: arr.join('/')
       }
+      // 执行添加购物车 api
       addShopCart(data).then(response => {
         if (response.code == 3000) {
           uni.showToast({
             title: response.msg,
             icon: 'none'
           })
+          //  更新购物车
+          this.$store.dispatch('shopCart/getShopCartData')
+          // 返回上一页
           setTimeout(() => {
             this.$Router.back(1)
           }, 500)
