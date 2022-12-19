@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-19 01:04:59
+ * @LastEditTime: 2022-12-19 18:22:32
  * @LastEditors: you name
  * @Description: 
 -->
@@ -194,18 +194,60 @@
       :show="popupShow"
       @show="showClick"
     >
-      <view class="bg-white max-h-96">
+      <view class="bg-white ">
         <view class="flex justify-between px-5 py-2">
           <view>
-            <text>选择</text>
-            <text>已选购商品（1件）</text>
+            <text
+              @click="checkAll(shopCartCheckAll)">{{ shopCartCheckAll?"全选":"未选" }}</text>
+            <text>已选购商品（{{ shopCartSum }}件）</text>
           </view>
           <view>清空购物车</view>
         </view>
         <!-- title end -->
 
-        <view class="px-5 py-2 border-t border-solid border-gray-100 pb-6">
-          商品内容
+        <view
+          class="px-5 pt-2 border-t border-solid border-gray-100  max-h-96 overflow-y-scroll"
+        >
+          <view
+            v-for="(shopCartItem , shopCartIndex) in shopCartList"
+            :key="shopCartIndex"
+            class="flex items-center gap-2 mb-2"
+          >
+            <view @click="selectShopCartProduct(shopCartItem)">
+              {{ shopCartItem.activeKey?'已选择':"选择" }}</view>
+
+            <image
+              :src="shopCartItem.small_img"
+              class="w-24 h-24 rounded-full"
+            ></image>
+
+            <view class="flex flex-col flex-1">
+              <text class="text-lg">{{shopCartItem.name}}</text>
+              <text class="text-sm text-gray-500">{{shopCartItem.rule}}</text>
+              <view class="flex justify-between">
+                <text
+                  class="text-orange-600 text-lg">{{shopCartItem.price}}</text>
+                <view class="flex">
+
+                  <view
+                    class="iconfont minus w-7 h-7 rounded-full flex items-center justify-center border-solid border border-selectText text-selectText active:border-blue-800"
+                    @click="updateShopCartCount('minus',shopCartItem)"
+                  >&#xe618;</view>
+                  <view class="w-9  flex items-center justify-center">
+                    {{shopCartItem.count}}</view>
+                  <view
+                    @click="updateShopCartCount('plus',shopCartItem)"
+                    class="iconfont w-7 h-7 rounded-full flex items-center justify-center bg-selectText text-white border border-solid border-selectText active:bg-blue-800"
+                  >&#xe62d;</view>
+                  <!-- 
+                  <text>-</text>
+                  <text>{{ shopCartItem.count }}</text>
+                  <text>+</text> -->
+                </view>
+              </view>
+            </view>
+
+          </view>
         </view>
 
         <!-- 占位 -->
@@ -245,7 +287,7 @@ export default {
   },
   components: { popup },
   computed: {
-    ...mapGetters(['shopCartSum', 'shopCartMoney', 'shopCartList', 'numSelectList'])
+    ...mapGetters(['shopCartSum', 'shopCartMoney', 'shopCartList', 'numSelectList', 'shopCartCheckAll'])
   },
   onLoad () {
     // 先获取到数据，再计算右边栏每项高度组成的数组
@@ -429,6 +471,38 @@ export default {
       else {
         this.popupShow = !this.popupShow
       }
+    },
+
+    // 更新 购物车商品数量
+    updateShopCartCount (type, item) {
+      console.log("updateShopCartCount => item", item)
+
+      if (type === 'minus') {   // 减少
+        if (item.count == 1) return
+        item.count = item.count - 1
+
+
+      } else if (type === 'plus') {  // 增加
+        item.count = item.count + 1
+
+      } else {
+        return
+      }
+
+      let data = { sid: item.sid, count: item.count }
+      this.$store.dispatch('shopCart/updateShopCartCount', data).then(() => {
+        this.$store.dispatch('shopCart/getShopCartData')
+      })
+    },
+
+    // 选择 商品购物车商品
+    selectShopCartProduct (item) {
+      this.$store.dispatch('shopCart/selectShopCartProduct', item)
+    },
+
+    // 全选 购物车商品
+    checkAll (type) {
+      this.$store.dispatch('shopCart/checkAll', !type)
     }
 
 

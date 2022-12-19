@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-18 15:18:25
+ * @LastEditTime: 2022-12-19 17:34:04
  * @LastEditors: you name
  * @Description: 
 -->
@@ -312,6 +312,7 @@ export default {
       }
       // 执行添加购物车 api
       addShopCart(data).then(response => {
+        console.log("addShopCart => response", response)
         if (response.code == 3000) {
           uni.showToast({
             title: response.msg,

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-11 20:50:45
- * @LastEditTime: 2022-12-17 22:22:21
+ * @LastEditTime: 2022-12-19 17:25:47
  * @LastEditors: you name
  * @Description: 菜单页api
  */
@@ -48,7 +48,7 @@ export function getShopCartCount () {
 }
 
 // 修改购物车商品数量
-export function modifyShopCartCount (data) {
+export function updateShopCartCount (data) {
 	return request({
 		url: '/modifyShopcartCount',
 		method: 'post',
@@ -59,10 +59,22 @@ export function modifyShopCartCount (data) {
 	})
 }
 
-// 删除 一个或者多个 购物车商品
+// 删除 一个或者多个 购物车商品  （假删除）
 export function removeShopCart (data) {
 	return request({
 		url: '/removeShopcart',
+		method: 'post',
+		data: {
+			...data,
+			tokenString: getToken()
+		}
+	})
+}
+
+// 删除 一个或者多个 购物车商品  （真删除）
+export function deleteShopCart (data) {
+	return request({
+		url: '/deleteShopcart',
 		method: 'post',
 		data: {
 			...data,
