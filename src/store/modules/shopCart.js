@@ -1,11 +1,11 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-17 22:15:05
- * @LastEditTime: 2022-12-19 18:24:59
+ * @LastEditTime: 2022-12-19 21:39:36
  * @LastEditors: you name
  * @Description: 
  */
-import { findAllShopCart, getShopCartCount, getShopCartRows, updateShopCartCount } from '@/api/menu'
+import { findAllShopCart, getShopCartCount, getShopCartRows, updateShopCartCount, removeShopCart } from '@/api/menu'
 const getDefaultState = () => {
 	return {
 		shopCartSum: 0,
@@ -43,84 +43,127 @@ const mutations = {
 const actions = {
 	// 获取购物车数据
 	getShopCartData ({ commit }) {
-		// 获取用户所有购物车数据
-		findAllShopCart().then(response => {
-			console.log("findAllShopCart => response", response.result)
-			// 总金额
-			let money = 0
-			// 总数
-			let num = 0
-			// 构造新的空数组用来存储合并后的商品列表
-			let numSelectList = []
+		return new Promise((resolve, reject) => {
 
-			let count = 0
+			// 获取用户所有购物车数据
+			findAllShopCart().then(response => {
+				// console.log("findAllShopCart => response", response)
+				// 总金额
+				let money = 0
+				// 总数
+				let num = 0
+				// 构造新的空数组用来存储合并后的商品列表
+				let numSelectList = []
 
-			response.result.forEach(item => {
+				let count = 0
 
-				item.activeKey = true
+				response.result.forEach(item => {
 
-				// 计算总价格
-				money = money + item.price * item.count
-				// 计算总数
-				num = num + item.count
-				// 查询 数组里是否有名字 pid 相同的  返回索引
-				// 如果没有符合条件的元素返回 -1
-				const index = numSelectList.findIndex(numItem => numItem.name === item.name && numItem.pid === item.pid)
+					if (item.active == undefined) {
+						item.activeKey = true
+					}
 
-				// if index > -1 则表示该商品已经出现过，则直接在 count 里加上重复的商品 数量
-				if (index > -1) {
-					numSelectList[index].count = numSelectList[index].count + item.count
+					// 计算总价格
+					money = money + item.price * item.count
+					// 计算总数
+					num = num + item.count
+					// 查询 数组里是否有名字 pid 相同的  返回索引
+					// 如果没有符合条件的元素返回 -1
+					const index = numSelectList.findIndex(numItem => numItem.name === item.name && numItem.pid === item.pid)
 
+					// if index > -1 则表示该商品已经出现过，则直接在 count 里加上重复的商品 数量
+					if (index > -1) {
+						numSelectList[index].count = numSelectList[index].count + item.count
+
+					}
+					// if index < 0 (-1) 则表示暂时没有相同的 名字 pid 商品数据 ，往 numSelectList 里添加当前数据
+					else {
+						let obj = JSON.stringify({
+							name: item.name,
+							pid: item.pid,
+							count: item.count
+						})
+						numSelectList.push(JSON.parse(obj))
+					}
+
+
+					if (item.activeKey == true) {
+						count++
+					}
+
+				})
+
+				// console.log("findAllShopCart => numSelectList", numSelectList)
+
+				// 设置总金额
+				commit('SET_MONEY', money)
+				// 设置购物车总数量
+				commit('SET_SUM', num)
+
+				// 设置购物车数据
+				commit('SET_SHOP_CART_LIST', response.result.reverse())
+				// 设置菜单选中商品列表数据
+				commit('SET_NUM_SELECT_LIST', numSelectList)
+
+				// 设置购物车条目
+				commit('SET_SHOP_CART_ROWS', response.result.length)
+
+
+				if (count == response.result.length) {
+					commit('SET_CHECK_ALL', true)
+				} else {
+					commit('SET_CHECK_ALL', false)
 				}
-				// if index < 0 (-1) 则表示暂时没有相同的 名字 pid 商品数据 ，往 numSelectList 里添加当前数据
-				else {
-					let obj = JSON.stringify({
-						name: item.name,
-						pid: item.pid,
-						count: item.count
-					})
-					numSelectList.push(JSON.parse(obj))
-				}
 
-				if (item.activeKey == true) {
-					count++
+				if (response.code === 5000) {
+					resolve()
+				} else {
+					reject(response.msg)
 				}
 
 			})
-			// console.log("findAllShopCart => numSelectList", numSelectList)
-
-			// 设置总金额
-			commit('SET_MONEY', money)
-			// 设置购物车总数量
-			commit('SET_SUM', num)
-
-			// 设置购物车数据
-			commit('SET_SHOP_CART_LIST', response.result)
-			// 设置菜单选中商品列表数据
-			commit('SET_NUM_SELECT_LIST', numSelectList)
-
-			// 设置购物车条目
-			commit('SET_SHOP_CART_ROWS', response.result.length)
-
-
-			if (count == response.result.length) {
-				commit('SET_CHECK_ALL', true)
-			} else {
-				commit('SET_CHECK_ALL', false)
-			}
-
 		})
 	},
 
 	// 更新购物车商品数量
-	updateShopCartCount ({ commit }, data) {
-		return new Promise((resole, reject) => {
-			updateShopCartCount(data).then(response => {
-				console.log("updateShopCartCount => response", response)
+	updateShopCartCount (context, data) {
 
-				resole()
+		return new Promise((resolve, reject) => {
+			updateShopCartCount(data).then(response => {
+				// console.log("updateShopCartCount => response", response)
+
+				// 总金额
+				let money = 0
+				// 总数
+				let num = 0
+
+				context.state.shopCartList.forEach((item) => {
+
+					if (item.activeKey == true) {
+						// 计算总价格
+						money = money + item.price * item.count
+						// 计算总数
+						num = num + item.count
+
+					}
+
+				})
+
+				// 设置总金额
+				context.commit('SET_MONEY', money)
+				// 设置购物车总数量
+				context.commit('SET_SUM', num)
+
+
+				if (response.code === 6000) {
+					resolve()
+				} else {
+					reject(response.msg)
+				}
+
 			})
 		})
+
 	},
 
 	// 选择 商品
@@ -186,6 +229,76 @@ const actions = {
 		context.commit('SET_SUM', num)
 		// 设置全选状态
 		context.commit('SET_CHECK_ALL', type)
+
+
+
+	},
+
+	// 删除购物车商品
+	removeShopCart (context, sidsArr) {
+		let data = { sids: JSON.stringify(sidsArr) }
+		return new Promise((resolve, reject) => {
+
+			removeShopCart(data).then(response => {
+				console.log("removeShopCart => response", response)
+
+				if (response.code === 7000) {
+
+					sidsArr.forEach(sidItem => {
+
+						const index = context.state.shopCartList.findIndex(item => sidItem === item.sid)
+						console.log("removeShopCart => index", index)
+						if (index > -1) {
+							context.state.shopCartList.splice(index, 1);
+						}
+					})
+
+					// 设置购物车数据
+					context.commit('SET_SHOP_CART_LIST', context.state.shopCartList.reverse())
+
+					// 总金额
+					let money = 0
+					// 总数
+					let num = 0
+
+					let count = 0
+
+					context.state.shopCartList.forEach(item => {
+
+						if (item.activeKey == true) {
+							// 计算总价格
+							money = money + item.price * item.count
+							// 计算总数
+							num = num + item.count
+
+							count++
+						}
+
+					})
+
+					if (count == context.state.shopCartList.length) {
+						// 设置全选状态
+						context.commit('SET_CHECK_ALL', true)
+					} else {
+						context.commit('SET_CHECK_ALL', false)
+					}
+
+					// 设置总金额
+					context.commit('SET_MONEY', money)
+					// 设置购物车总数量
+					context.commit('SET_SUM', num)
+
+					resolve()
+
+				} else {
+
+					reject(response.msg)
+				}
+
+
+			})
+
+		})
 
 
 

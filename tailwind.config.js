@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-10 01:52:49
- * @LastEditTime: 2022-12-16 23:08:40
+ * @LastEditTime: 2022-12-19 19:41:35
  * @LastEditors: you name
  * @Description: 
  */
@@ -32,6 +32,7 @@ module.exports = {
         'orange-900': "#7c2d12",
         'selectText': '#0022ab',
         'selectBG': '#eaeeff',
+        'brown': '#c2a379'
       },
 
     },

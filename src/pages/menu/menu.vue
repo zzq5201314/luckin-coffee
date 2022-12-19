@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-19 18:22:32
+ * @LastEditTime: 2022-12-19 21:38:21
  * @LastEditors: you name
  * @Description: 
 -->
@@ -108,7 +108,7 @@
                         >
                           <text
                             v-if="numItem.pid == productItem.pid"
-                            class="absolute top-0 right-0 -mt-3 -mr-2  flex justify-center items-center rounded-full bg-orange-300 w-5 h-5 border-white border border-solid text-white"
+                            class="absolute top-0 right-0 -mt-3 -mr-2  flex justify-center items-center rounded-full bg-brown w-5 h-5 border-white border border-solid text-white"
                           >{{numItem.count}}</text>
                         </text>
                       </view>
@@ -149,7 +149,7 @@
         >
           <text class="iconfont text-5xl">&#xe621;</text>
           <text
-            class="absolute top-0 right-4 bg-selectText text-white w-6 h-6 rounded-full flex items-center justify-center border-solid border border-white"
+            class="absolute top-0 right-4 bg-brown text-white w-6 h-6 rounded-full flex items-center justify-center border-solid border border-white"
           >{{shopCartSum}}</text>
 
           <!-- 展开按钮   -->
@@ -169,9 +169,10 @@
           @click="openShopCart"
         >
           <text class="text-lg">预计到手<text
-              class="text-orange-600 font-semibold text-xl"
+              class=" font-semibold text-xl"
+              :class="{'text-orange-600':(shopCartMoney>0)}"
             >
-              <text class="text-sm">¥</text>
+              <text class="text-sm mr-1">¥</text>
               {{shopCartMoney}}</text></text>
           <!-- <text class="text-xs text-gray-500">已享受更低优惠</text> -->
         </view>
@@ -189,7 +190,6 @@
     </view>
 
     <!-- 普通弹窗 -->
-
     <popup
       :show="popupShow"
       @show="showClick"
@@ -197,11 +197,25 @@
       <view class="bg-white ">
         <view class="flex justify-between px-5 py-2">
           <view>
-            <text
-              @click="checkAll(shopCartCheckAll)">{{ shopCartCheckAll?"全选":"未选" }}</text>
-            <text>已选购商品（{{ shopCartSum }}件）</text>
+
+            <label
+              class="radio"
+              @click="checkAll(shopCartCheckAll)"
+            >
+              <radio
+                :checked="shopCartCheckAll"
+                color="#c2a379"
+              />
+            </label>
+            <text class="ml-2">已选购商品（{{ shopCartSum }}件）</text>
           </view>
-          <view>清空购物车</view>
+          <view
+            @click="removeShopCart(shopCartList)"
+            class="flex items-center"
+          >
+            <text class="iconfont text-xl">&#xe623;</text>
+            <text>清空购物车</text>
+          </view>
         </view>
         <!-- title end -->
 
@@ -213,8 +227,17 @@
             :key="shopCartIndex"
             class="flex items-center gap-2 mb-2"
           >
-            <view @click="selectShopCartProduct(shopCartItem)">
-              {{ shopCartItem.activeKey?'已选择':"选择" }}</view>
+            <view>
+              <label
+                class="radio"
+                @click="selectShopCartProduct(shopCartItem)"
+              >
+                <radio
+                  :checked="shopCartItem.activeKey"
+                  color="#c2a379"
+                />
+              </label>
+            </view>
 
             <image
               :src="shopCartItem.small_img"
@@ -267,6 +290,7 @@ import { getProductList } from '@/api/home'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import popup from './components/popup'
+import { _throttle, _debounce } from '@/utils/fn'
 export default {
   // name: "menu",
   data () {
@@ -463,7 +487,7 @@ export default {
         return;
       }
 
-      if (this.shopCartSum == 0) {
+      if (this.shopCartList.length == 0) {
         uni.showToast({
           title: '请添加商品'
         })
@@ -474,11 +498,14 @@ export default {
     },
 
     // 更新 购物车商品数量
-    updateShopCartCount (type, item) {
-      console.log("updateShopCartCount => item", item)
+    updateShopCartCount: _debounce(function (type, item) {
+      // console.log("updateShopCartCount => item", item)
 
       if (type === 'minus') {   // 减少
-        if (item.count == 1) return
+        if (item.count == 1) {
+          this.removeShopCart(item.sid)
+          return
+        }
         item.count = item.count - 1
 
 
@@ -490,10 +517,8 @@ export default {
       }
 
       let data = { sid: item.sid, count: item.count }
-      this.$store.dispatch('shopCart/updateShopCartCount', data).then(() => {
-        this.$store.dispatch('shopCart/getShopCartData')
-      })
-    },
+      this.$store.dispatch('shopCart/updateShopCartCount', data)
+    }),
 
     // 选择 商品购物车商品
     selectShopCartProduct (item) {
@@ -503,9 +528,38 @@ export default {
     // 全选 购物车商品
     checkAll (type) {
       this.$store.dispatch('shopCart/checkAll', !type)
-    }
+    },
 
+    // 删除 一个或多个 购物车商品
+    removeShopCart: _debounce(function (data) {
 
+      let tempArr = []
+      // 判断是否 单个删除 （数组代表删除多个）
+      if (typeof data != 'string') {
+
+        if (Array.isArray(data)) {
+          data.forEach(item => {
+            tempArr.push(item.sid)
+          })
+        }
+        else {
+          return
+        }
+
+      } else {
+        tempArr.push(data)
+      }
+
+      // 执行 vuex里的删除
+      this.$store.dispatch('shopCart/removeShopCart', tempArr).then(() => {
+        // 重新获取数据
+        this.$store.dispatch('shopCart/getShopCartData').then(() => {
+          if (this.shopCartList.length == 0) {
+            this.popupShow = false
+          }
+        })
+      })
+    })
 
   }
 }
