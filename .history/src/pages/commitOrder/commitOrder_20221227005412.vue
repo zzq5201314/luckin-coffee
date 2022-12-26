@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 00:55:28
+ * @LastEditTime: 2022-12-27 00:53:37
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -47,8 +47,8 @@ export default {
     ...mapGetters(['addressList'])
   },
   onLoad () {
-    // console.log('sids =>', this.$Route.query.sids);
-    // console.log('sids => =>', this.sids);
+    console.log('sids =>', this.$Route.query.sids);
+    console.log('sids => =>', this.sids);
     this.getData()
   },
   // 函数

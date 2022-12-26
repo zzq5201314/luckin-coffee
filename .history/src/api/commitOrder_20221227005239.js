@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-25 14:28:37
- * @LastEditTime: 2022-12-27 00:55:27
+ * @LastEditTime: 2022-12-27 00:52:39
  * @LastEditors: you name
  * @Description: 提交订单页api
  */
@@ -10,6 +10,7 @@ import { getToken } from "@/utils/auth"
 
 // 获取提交订单页商品信息
 export function getCommitOrderProductData (sids) {
+	console.log("getCommitOrderProductData => JSON.stringify(sids)", JSON.stringify(sids))
 	return request({
 		url: "/commitShopcart",
 		method: "get",

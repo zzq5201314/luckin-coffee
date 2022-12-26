@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-26 21:28:20
- * @LastEditTime: 2022-12-27 00:45:02
+ * @LastEditTime: 2022-12-27 00:40:41
  * @LastEditors: you name
  * @Description: 
 -->
@@ -17,7 +17,7 @@
       <view
         v-for="(item , index) in addressList"
         :key="index"
-        class="flex items-center py-3 border-0 border-b border-solid border-gray-100 gap-4"
+        class="flex items-center py-4 border-0 border-b border-solid border-gray-100 gap-4"
         @click="select(item.aid)"
       >
 
@@ -106,9 +106,10 @@ export default {
     },
 
     select (aid) {
-
-      if (this.$Route.query.select == "true") {
-
+      console.log("select => aid", aid)
+      console.log("select => this.$Route.query", this.$Route.query)
+      if (this.$Route.query.select == true) {
+        console.log("select => aid", aid)
         this.$store.dispatch("address/selectAddress", aid).then(_ => {
 
           this.$Router.back(1)
