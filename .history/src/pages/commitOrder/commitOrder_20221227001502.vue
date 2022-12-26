@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 00:28:33
+ * @LastEditTime: 2022-12-27 00:15:02
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -16,11 +16,11 @@
     >
       <view class="flex-auto">
         <view>
-          {{ addressList[0].province }}{{ addressList[0].city }}{{ addressList[0].county }}
+          {{ addressData.province }}{{ addressData.city }}{{ addressData.county }}
         </view>
-        <view class="text-lg font-semibold">{{ addressList[0].addressDetail }}
+        <view class="text-lg font-semibold">{{ addressData.addressDetail }}
         </view>
-        <view>{{addressList[0].name}} {{ addressList[0].tel }}</view>
+        <view>{{addressData.name}} {{ addressData.tel }}</view>
       </view>
 
       <view class="iconfont">&#xe605;</view>
@@ -40,6 +40,7 @@ export default {
     return {
       sids: this.$Route.query.sids,
       productList: [],
+      addressData: {}
     }
   },
   components: {},
@@ -62,23 +63,23 @@ export default {
 
       })
 
-      // if (this.addressList.length > 0) {
+      if (this.addressList.length > 0) {
 
-      //   this.addressList.forEach(item => {
-      //     if (item.isDefault == 1) {
-      //       this.addressList[0] = item
-      //     }
+        this.addressList.forEach(item => {
+          if (item.isDefault == 1) {
+            this.addressData = item
+          }
 
-      //   })
+        })
 
 
-      // }
+      }
 
     },
 
     goAddress () {
       this.$Router.push({
-        path: '/pages/address/address',
+        name: "address",
         query: {
           select: true
         }

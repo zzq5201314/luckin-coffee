@@ -16,11 +16,11 @@
     >
       <view class="flex-auto">
         <view>
-          {{ addressList[0].province }}{{ addressList[0].city }}{{ addressList[0].county }}
+          {{ addressData.province }}{{ addressData.city }}{{ addressData.county }}
         </view>
-        <view class="text-lg font-semibold">{{ addressList[0].addressDetail }}
+        <view class="text-lg font-semibold">{{ addressData.addressDetail }}
         </view>
-        <view>{{addressList[0].name}} {{ addressList[0].tel }}</view>
+        <view>{{addressData.name}} {{ addressData.tel }}</view>
       </view>
 
       <view class="iconfont">&#xe605;</view>
@@ -40,6 +40,7 @@ export default {
     return {
       sids: this.$Route.query.sids,
       productList: [],
+      addressData: this.addressList[0]
     }
   },
   components: {},
@@ -66,7 +67,7 @@ export default {
 
       //   this.addressList.forEach(item => {
       //     if (item.isDefault == 1) {
-      //       this.addressList[0] = item
+      //       this.addressData = item
       //     }
 
       //   })

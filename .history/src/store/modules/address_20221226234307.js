@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-26 22:18:40
- * @LastEditTime: 2022-12-27 00:23:46
+ * @LastEditTime: 2022-12-26 23:43:07
  * @LastEditors: you name
  * @Description: 
  */
@@ -62,7 +62,7 @@ const actions = {
 							tempArr[0].isDefault = 1
 						}
 
-						commit("SET_ADDRESS_LIST", tempArr)
+						commit("SET_ADDRESS_LIST", tempArr.reverse())
 
 					}
 
@@ -81,32 +81,27 @@ const actions = {
 	// 选择地址
 	selectAddress (context, aid) {
 
-		return new Promise((resolve, reject) => {
+		let tempArr = []
+		context.state.addressList.forEach(item => {
 
-			let tempArr = []
-			context.state.addressList.forEach(item => {
+			if (item.aid == aid) {
+				// 设置默认地址
+				item.isDefault = 1
 
-				if (item.aid == aid) {
-					// 设置默认地址
-					item.isDefault = 1
+				// 置顶默认收货地址
+				tempArr = [item, ...tempArr]
 
-					// 置顶默认收货地址
-					tempArr = [item, ...tempArr]
+			} else {
 
-				} else {
+				// 其他未被选中的设置非默认收货地址
+				item.isDefault = 0
 
-					// 其他未被选中的设置非默认收货地址
-					item.isDefault = 0
+				tempArr.push(item)
+			}
 
-					tempArr.push(item)
-				}
-
-			})
-
-			context.commit("SET_ADDRESS_LIST", tempArr)
-
-			resolve()
 		})
+
+		context.commit("SET_ADDRESS_LIST", tempArr.reverse())
 
 	}
 

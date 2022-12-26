@@ -293,8 +293,6 @@ export default {
           // console.log("addAddress => response", response)
           if (response.code === 9000) {
 
-            this.$store.dispatch("address/findAddress")
-
             uni.showToast({
               title: response.msg,
               icon: 'none'

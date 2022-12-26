@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-26 21:28:20
- * @LastEditTime: 2022-12-27 00:29:36
+ * @LastEditTime: 2022-12-27 00:09:24
  * @LastEditors: you name
  * @Description: 
 -->
@@ -17,8 +17,7 @@
       <view
         v-for="(item , index) in addressList"
         :key="index"
-        class="flex items-center py-4 border-0 border-b border-solid border-gray-100 gap-4"
-        @click="select(item.aid)"
+        class="flex items-center py-2 border-0 border-b border-solid border-gray-100 gap-2"
       >
 
         <view v-if="item.isDefault==1">
@@ -50,10 +49,7 @@
     </view>
 
     <view class="btn fixed bottom-0 left-0 right-0 bg-white">
-      <view
-        class="text-white bg-selectText py-2 m-2  rounded-full text-center"
-        @click="goAddAddress"
-      >
+      <view class="text-white bg-selectText py-2 m-2  rounded-full text-center">
         新增收货地址</view>
 
       <view class="page"></view>
@@ -99,21 +95,6 @@ export default {
   // 函数
   methods: {
 
-    goAddAddress () {
-      this.$Router.push({
-        name: "addAddress"
-      })
-    },
-
-    select (aid) {
-      if (this.$Route.query.select == true) {
-        console.log("select => aid", aid)
-        this.$store.dispatch("address/selectAddress", aid).then(_ => {
-
-          this.$Router.back(1)
-        })
-      }
-    }
 
   }
 }

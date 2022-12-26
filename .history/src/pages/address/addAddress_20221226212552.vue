@@ -89,7 +89,7 @@
 
     </view>
 
-    <view class="fixed bottom-0 left-0 right-0 bg-white">
+    <view class="fixed bottom-0 left-0 right-0">
       <view
         class="bg-selectText text-white m-2 text-center  py-2 rounded-full text-lg"
         :class="{'bg-opacity-50':from.tel.length!==11||from.name==''||from.addressDetail==''||from.areaCode.length<1}"
@@ -292,8 +292,6 @@ export default {
         addAddress(data).then(response => {
           // console.log("addAddress => response", response)
           if (response.code === 9000) {
-
-            this.$store.dispatch("address/findAddress")
 
             uni.showToast({
               title: response.msg,
