@@ -1,0 +1,145 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      // uni-ui 规则如下配置
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+      // "^uni-((?!(shadow-root|icons)).*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue" //这里排除了uni-shadow-root，uni-icons
+    }
+  },
+
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/home/home",
+      "name": "home",
+      // "aliasPath": "/",
+      "meta": {
+        "title": "首页"
+      },
+      // "bounce": "none",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/my/my",
+      "name": "my",
+      "meta": {
+        "title": "我的"
+      },
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/order/order",
+      "name": "order",
+      "meta": {
+        "title": "订单"
+      },
+      "style": {
+        "navigationBarTitleText": "我的订单"
+      }
+    },
+    {
+      "path": "pages/menu/menu",
+      "name": "menu",
+      "meta": {
+        "title": "菜单"
+      },
+      "style": {
+        "navigationBarTextStyle": "black",
+        "navigationBarBackgroundColor": "#fff"
+      },
+      "app-plus": {
+        "bounce": "none" // 将回弹属性关掉
+      }
+    },
+    {
+      "path": "pages/productInfo/productInfo",
+      "name": "productInfo",
+      "meta": {
+        "title": "商品详情"
+      },
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/commitOrder/commitOrder",
+      "name": "commitOrder",
+      "meta": {
+        "title": "确认订单"
+      }
+    },
+    {
+      "path": "pages/address/address",
+      "name": "address",
+      "meta": {
+        "title": "收货地址"
+      },
+      "usingComponents": {
+        "van-area": "components/vant/area/index"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "name": "login",
+      "meta": {
+        "title": "账户登录"
+      },
+      "style": {
+        "navigationStyle": "custom"
+        // "navigationBarTitleText": "账户登录"
+        // "navigationStyle": "custom"
+      }
+    }
+  ],
+
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "羊了个咖啡",
+    "navigationBarBackgroundColor": "#f5f5f5",
+    "backgroundColor": "#fff",
+    // "navigationStyle": "custom",
+    "app-plus": {
+      // "titleNView": false,
+      "scrollIndicator": "none"
+    }
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#0024ad",
+    "borderStyle": "white",
+    "backgroundColor": "#fff",
+    // "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/tabbar/shouyefill.png",
+        "selectedIconPath": "static/tabbar/shouyefill_selected.png"
+      },
+      {
+        "pagePath": "pages/menu/menu",
+        "text": "菜单",
+        "iconPath": "static/tabbar/shipinyinliao.png",
+        "selectedIconPath": "static/tabbar/shipinyinliao_selected.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "订单",
+        "iconPath": "static/tabbar/order.png",
+        "selectedIconPath": "static/tabbar/order_selected.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "static/tabbar/people_number.png",
+        "selectedIconPath": "static/tabbar/people_number_selected.png"
+      }
+    ],
+    "current": 0
+  }
+}

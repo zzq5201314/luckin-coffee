@@ -1,0 +1,203 @@
+<!--
+ * @Author: 清羽
+ * @Date: 2022-12-25 16:47:44
+ * @LastEditTime: 2022-12-25 20:28:17
+ * @LastEditors: you name
+ * @Description: 
+-->
+<!-- address 页 -->
+<template>
+  <view class="address">
+    address 页
+
+    <uni-data-picker
+      placeholder="请选择省 / 市 / 区"
+      popup-title="请选择所在地区"
+      v-model="value"
+      :localdata="dataTree"
+      @change="onchange"
+      @nodeclick="onnodeclick"
+    >
+    </uni-data-picker>
+
+    <uni-data-picker
+      v-model="value"
+      :localdata="items"
+      popup-title="请选择班级"
+      @change="onchange"
+      @nodeclick="onnodeclick"
+    ></uni-data-picker>
+  </view>
+</template>
+
+<script>
+
+const cityRows = require('./data.json')
+export default {
+  // name: "address",
+  data () {
+    return {
+
+      // dataTree: [
+      //   {
+      //     text: "一年级",
+      //     value: "1-0",
+      //     children: [{
+      //       text: "1.1班",
+      //       value: "1-1"
+      //     },
+      //     {
+      //       text: "1.2班",
+      //       value: "1-2"
+      //     }]
+      //   },
+      //   {
+      //     text: "二年级",
+      //     value: "2-0",
+      //     children: [{
+      //       text: "2.1班",
+      //       value: "2-1"
+      //     },
+      //     {
+      //       text: "2.2班",
+      //       value: "2-2"
+      //     }]
+      //   },
+      //   {
+      //     text: "三年级",
+      //     value: "3-0",
+      //     disable: true
+      //   }],
+      dataTree: cityRows,
+      value: [""],
+      items: [{
+        text: "一年级",
+        value: "1-0",
+        children: [
+          {
+            text: "1.1班",
+            value: "1-1"
+          },
+          {
+            text: "1.2班",
+            value: "1-2"
+          }
+        ]
+      },
+      {
+        text: "二年级",
+        value: "2-0"
+      },
+      {
+        text: "三年级",
+        value: "3-0"
+      }],
+
+      // 省市区
+      localData: []
+    }
+
+  },
+  components: {},
+  onLoad () {
+    // console.log(this.dataTree);
+
+    // 省市区数据树生成
+    this.localData = this.get_city_tree()
+    console.log("onLoad => this.localData", this.localData)
+  },
+  // 函数
+  methods: {
+
+    // 省市区数据树生成
+    get_city_tree () {
+      let res = []
+      if (cityRows.length) {
+        // 递归生成
+        res = this.handleTree(cityRows)
+      }
+      return res
+    },
+
+    onnodeclick (e) {
+      console.log(e);
+    },
+    onpopupopened (e) {
+      console.log('popupopened');
+    },
+    onpopupclosed (e) {
+      console.log('popupclosed');
+    },
+    onchange (e) {
+      console.log('onchange:', e);
+    },
+
+
+    handleTree (data, parent_code = null) {
+      let res = []
+
+      let keys = {
+        id: 'code',
+        pid: 'parent_code',
+        children: 'children',
+
+        text: 'name',
+        value: 'code'
+      }
+
+      let oneItemDEMO = {
+        text: '',
+        value: '',
+        children: []
+      }
+      let oneItem = {}
+
+      // 循环
+      for (let index in data) {
+        // 判断
+        if (parent_code === null) {
+          // 顶级菜单 - 省
+          if (!data[index].hasOwnProperty(keys.pid) || data[index][keys.pid] == parent_code) {
+            // 不存在parent_code，或者已匹配
+            oneItem = JSON.parse(JSON.stringify(oneItemDEMO))
+            oneItem.text = data[index][keys.text]
+            oneItem.value = data[index][keys.value]
+
+            // 递归下去
+            oneItem.children = this.handleTree(data, data[index][keys.id])
+            res.push(oneItem)
+
+          } else {
+            // 匹配不到，跳过
+          }
+
+        } else {
+          // 非顶级菜单 - 市、区、街道
+          if (data[index].hasOwnProperty(keys.pid) && data[index][keys.pid] == parent_code) {
+            // 已匹配
+            oneItem = JSON.parse(JSON.stringify(oneItemDEMO))
+            oneItem.text = data[index][keys.text]
+            oneItem.value = data[index][keys.value]
+
+            // 递归下去
+            oneItem.children = this.handleTree(data, data[index][keys.id])
+            res.push(oneItem)
+
+          } else {
+            // 匹配不到，跳过
+          }
+
+        }
+
+      }
+
+      return res
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+/* @import url(); 引入css类 */
+.address {
+}
+</style>
