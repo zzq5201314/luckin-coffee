@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 16:45:19
+ * @LastEditTime: 2022-12-27 16:36:25
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -196,28 +196,26 @@ export default {
         address: this.addressList[0].province + this.addressList[0].city + this.addressList[0].county + this.addressList[0].addressDetail,
         receiver: this.addressList[0].name
       }
+      console.log("pay => data", data)
+
 
       pay(data).then(response => {
         console.log("pay => response", response)
         if (response.code === 60000) {
 
-          // 结算成功 删除vuex里已结算的购物车商品
-          this.$store.dispatch('shopCart/removeShopCart', this.sids).then(() => {
-            // 更新购物车数据
-            this.$store.dispatch('shopCart/getShopCartData')
+          uni.showToast({
+            title: response.msg,
+            icon: "none"
+          })
 
-            uni.showToast({
-              title: response.msg,
-              icon: "none"
+          setTimeout(() => {
+
+            this.$Router.push({
+              name: "order"
             })
 
-            setTimeout(() => {
-              this.$Router.push({
-                name: "order"
-              })
-            }, 500)
+          }, 500)
 
-          })
 
         }
 

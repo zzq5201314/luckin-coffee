@@ -1,16 +1,13 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 16:45:19
+ * @LastEditTime: 2022-12-27 15:31:14
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
 <!-- commitOrder 页 -->
 <template>
-  <view
-    class="commitOrder bg-bgColor p-3 overflow-y-scroll"
-    :style="{height:windowHeight+'px'}"
-  >
+  <view class="commitOrder bg-bgColor p-3">
     <!-- commitOrder 页 -->
 
     <view
@@ -29,12 +26,12 @@
       <view class="iconfont">&#xe605;</view>
     </view>
 
-    <view class="flex flex-col bg-white mt-3 p-4 rounded-lg">
+    <view class="flex flex-col gap-2 bg-white mt-3 p-4 rounded-lg">
 
       <view
         v-for="(productItem,productIndex) in productList"
         :key="productIndex"
-        class="flex items-center gap-2 py-3"
+        class="flex items-center gap-2"
       >
 
         <view class="w-24 h-24 rounded-full overflow-hidden">
@@ -63,35 +60,18 @@
 
       </view>
 
-      <view
-        class="flex justify-end pt-3 border-0 border-t border-gray-200 border-dashed"
-      >
+    </view>
+
+    <view>
+
+      <view>
 
         <view>
           <text>应付</text>
-          <text class="font-semibold ml-2">¥</text>
-          <text class="font-semibold text-lg">{{price}}</text>
+          <text>¥</text>
+          <text>{{price}}</text>
         </view>
-
-      </view>
-
-    </view>
-
-    <view class="fixed bottom-0 left-0 right-0 bg-white p-3 bottom">
-
-      <view class="flex items-center">
-
-        <view class="flex-auto">
-          <text>应付</text>
-          <text class="font-semibold text-lg ml-2">¥</text>
-          <text class="font-semibold text-2xl tracking-tighter">{{price}}</text>
-        </view>
-
-        <view
-          class="bg-orange-600 text-white px-12 py-3 rounded-full "
-          @click="pay"
-        >去支付
-        </view>
+        <view>去支付</view>
 
       </view>
 
@@ -103,15 +83,13 @@
 
 <script>
 
-import { getCommitOrderProductData, pay } from "@/api/commitOrder"
+import { getCommitOrderProductData } from "@/api/commitOrder"
 import { findAddress } from "@/api/address"
 import { mapGetters } from "vuex"
-import { nextTick } from 'vue'
 export default {
   name: "commitOrder",
   data () {
     return {
-      windowHeight: 0,
       sids: this.$Route.query.sids,
       productList: [], // 商品列表
       price: 0  // 总价
@@ -125,23 +103,6 @@ export default {
     // console.log('sids =>', this.$Route.query.sids);
     // console.log('sids => =>', this.sids);
     this.getData()
-  },
-  onReady () {
-
-    uni.getSystemInfo({
-      success: (res) => {
-        console.log("onReady => res", res)
-
-        let bottom = uni.createSelectorQuery().select(".bottom")
-        bottom.boundingClientRect((data) => {
-          console.log("bottom.boundingClientRect => data", data)
-          this.windowHeight = res.windowHeight - data.height
-        }).exec()
-        console.log("bottom.boundingClientRect =>  this.windowHeight", this.windowHeight)
-
-      }
-    })
-
   },
   // 函数
   methods: {
@@ -186,43 +147,6 @@ export default {
           select: 'true'
         }
       })
-    },
-
-    pay () {
-
-      let data = {
-        sids: JSON.stringify(this.sids),
-        phone: this.addressList[0].phone,
-        address: this.addressList[0].province + this.addressList[0].city + this.addressList[0].county + this.addressList[0].addressDetail,
-        receiver: this.addressList[0].name
-      }
-
-      pay(data).then(response => {
-        console.log("pay => response", response)
-        if (response.code === 60000) {
-
-          // 结算成功 删除vuex里已结算的购物车商品
-          this.$store.dispatch('shopCart/removeShopCart', this.sids).then(() => {
-            // 更新购物车数据
-            this.$store.dispatch('shopCart/getShopCartData')
-
-            uni.showToast({
-              title: response.msg,
-              icon: "none"
-            })
-
-            setTimeout(() => {
-              this.$Router.push({
-                name: "order"
-              })
-            }, 500)
-
-          })
-
-        }
-
-      })
-
     }
   }
 }

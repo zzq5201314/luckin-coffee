@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 16:45:19
+ * @LastEditTime: 2022-12-27 16:43:52
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -196,6 +196,8 @@ export default {
         address: this.addressList[0].province + this.addressList[0].city + this.addressList[0].county + this.addressList[0].addressDetail,
         receiver: this.addressList[0].name
       }
+      console.log("pay => data", data)
+
 
       pay(data).then(response => {
         console.log("pay => response", response)
@@ -218,6 +220,9 @@ export default {
             }, 500)
 
           })
+
+
+
 
         }
 

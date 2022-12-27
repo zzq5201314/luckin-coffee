@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 16:45:19
+ * @LastEditTime: 2022-12-27 16:21:41
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -106,7 +106,6 @@
 import { getCommitOrderProductData, pay } from "@/api/commitOrder"
 import { findAddress } from "@/api/address"
 import { mapGetters } from "vuex"
-import { nextTick } from 'vue'
 export default {
   name: "commitOrder",
   data () {
@@ -190,39 +189,13 @@ export default {
 
     pay () {
 
-      let data = {
-        sids: JSON.stringify(this.sids),
-        phone: this.addressList[0].phone,
-        address: this.addressList[0].province + this.addressList[0].city + this.addressList[0].county + this.addressList[0].addressDetail,
-        receiver: this.addressList[0].name
-      }
 
-      pay(data).then(response => {
-        console.log("pay => response", response)
-        if (response.code === 60000) {
+      console.log("pay => this.sids", this.sids)
 
-          // 结算成功 删除vuex里已结算的购物车商品
-          this.$store.dispatch('shopCart/removeShopCart', this.sids).then(() => {
-            // 更新购物车数据
-            this.$store.dispatch('shopCart/getShopCartData')
+      // pay().then(response => {
+      //   console.log("pay => response", response)
 
-            uni.showToast({
-              title: response.msg,
-              icon: "none"
-            })
-
-            setTimeout(() => {
-              this.$Router.push({
-                name: "order"
-              })
-            }, 500)
-
-          })
-
-        }
-
-      })
-
+      // })
     }
   }
 }

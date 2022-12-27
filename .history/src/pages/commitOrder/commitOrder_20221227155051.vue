@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 16:45:19
+ * @LastEditTime: 2022-12-27 15:50:27
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
 <!-- commitOrder 页 -->
 <template>
   <view
-    class="commitOrder bg-bgColor p-3 overflow-y-scroll"
+    class="commitOrder bg-bgColor p-3"
     :style="{height:windowHeight+'px'}"
   >
     <!-- commitOrder 页 -->
@@ -29,12 +29,12 @@
       <view class="iconfont">&#xe605;</view>
     </view>
 
-    <view class="flex flex-col bg-white mt-3 p-4 rounded-lg">
+    <view class="flex flex-col gap-2 bg-white mt-3 p-4 rounded-lg">
 
       <view
         v-for="(productItem,productIndex) in productList"
         :key="productIndex"
-        class="flex items-center gap-2 py-3"
+        class="flex items-center gap-2"
       >
 
         <view class="w-24 h-24 rounded-full overflow-hidden">
@@ -63,9 +63,7 @@
 
       </view>
 
-      <view
-        class="flex justify-end pt-3 border-0 border-t border-gray-200 border-dashed"
-      >
+      <view class="flex justify-end">
 
         <view>
           <text>应付</text>
@@ -84,13 +82,10 @@
         <view class="flex-auto">
           <text>应付</text>
           <text class="font-semibold text-lg ml-2">¥</text>
-          <text class="font-semibold text-2xl tracking-tighter">{{price}}</text>
+          <text class="font-semibold text-2xl">{{price}}</text>
         </view>
 
-        <view
-          class="bg-orange-600 text-white px-12 py-3 rounded-full "
-          @click="pay"
-        >去支付
+        <view class="bg-orange-600 text-white px-12 py-3 rounded-full ">去支付
         </view>
 
       </view>
@@ -103,10 +98,9 @@
 
 <script>
 
-import { getCommitOrderProductData, pay } from "@/api/commitOrder"
+import { getCommitOrderProductData } from "@/api/commitOrder"
 import { findAddress } from "@/api/address"
 import { mapGetters } from "vuex"
-import { nextTick } from 'vue'
 export default {
   name: "commitOrder",
   data () {
@@ -186,43 +180,6 @@ export default {
           select: 'true'
         }
       })
-    },
-
-    pay () {
-
-      let data = {
-        sids: JSON.stringify(this.sids),
-        phone: this.addressList[0].phone,
-        address: this.addressList[0].province + this.addressList[0].city + this.addressList[0].county + this.addressList[0].addressDetail,
-        receiver: this.addressList[0].name
-      }
-
-      pay(data).then(response => {
-        console.log("pay => response", response)
-        if (response.code === 60000) {
-
-          // 结算成功 删除vuex里已结算的购物车商品
-          this.$store.dispatch('shopCart/removeShopCart', this.sids).then(() => {
-            // 更新购物车数据
-            this.$store.dispatch('shopCart/getShopCartData')
-
-            uni.showToast({
-              title: response.msg,
-              icon: "none"
-            })
-
-            setTimeout(() => {
-              this.$Router.push({
-                name: "order"
-              })
-            }, 500)
-
-          })
-
-        }
-
-      })
-
     }
   }
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-26 21:28:20
- * @LastEditTime: 2022-12-27 14:40:44
+ * @LastEditTime: 2022-12-27 14:39:31
  * @LastEditors: you name
  * @Description: 
 -->
@@ -107,6 +107,8 @@ export default {
 
     select (aid) {
 
+      console.log("select => this.$Route.query.select == 'true'", this.$Route.query.select == "true")
+      console.log("select => this.$Route", this.$Route)
       if (this.$Route.query.select == "true") {
 
         this.$store.dispatch("address/selectAddress", aid).then(_ => {
