@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 22:52:35
- * @LastEditTime: 2022-12-27 19:53:46
+ * @LastEditTime: 2022-12-16 19:44:32
  * @LastEditors: you name
  * @Description: 
 -->
@@ -333,7 +333,6 @@ export default {
 }
 /deep/ .segmented-control__item--text {
   // position: relative;
-  border-bottom-width: 2px;
   border-color: #0f0f99;
 }
 // /deep/ .segmented-control__item--text::after {

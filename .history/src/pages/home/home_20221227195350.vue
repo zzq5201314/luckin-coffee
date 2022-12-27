@@ -333,7 +333,6 @@ export default {
 }
 /deep/ .segmented-control__item--text {
   // position: relative;
-  border-bottom-width: 2px;
   border-color: #0f0f99;
 }
 // /deep/ .segmented-control__item--text::after {

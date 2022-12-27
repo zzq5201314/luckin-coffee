@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-27 19:47:33
+ * @LastEditTime: 2022-12-27 19:45:47
  * @LastEditors: you name
  * @Description: 订单页
 -->
@@ -263,7 +263,7 @@ export default {
           })
 
           console.log("findOrder => tempArr", tempArr)
-          this.orderList = tempArr.reverse()
+          this.orderList = tempArr
         }
       })
     },

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-14 23:26:35
- * @LastEditTime: 2022-12-27 19:37:36
+ * @LastEditTime: 2022-12-27 19:34:54
  * @LastEditors: you name
  * @Description: 
  */
@@ -33,11 +33,6 @@ export function _debounce (fn, delay = 200) {
 		}, delay)
 	}
 }
-
-
-//使用
-// formatTime("2022-12-15T10:28:57.000+00:00");
-//输出  2022-12-15 18:28:57
 
 /* 将UTC时间转换成东八区时间 */
 export function formatTime (utc_datetime) {

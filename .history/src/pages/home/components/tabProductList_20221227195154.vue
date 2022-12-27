@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-16 18:09:56
- * @LastEditTime: 2022-12-27 19:52:47
+ * @LastEditTime: 2022-12-27 19:51:44
  * @LastEditors: you name
  * @Description: 
 -->
@@ -20,11 +20,8 @@
         class="w-full h-44 "
         mode="aspectFill"
       ></image>
-      <text class="px-2 py-1 text-lg">{{productItem.name}}</text>
-      <view class="px-2 pb-1">
-        <text>¥</text>
-        <text class="text-lg">{{parseFloat(productItem.price)}}</text>
-      </view>
+      <text class="px-2 py-1">{{productItem.name}}</text>
+      <view class="px-2 py-1">{{parseFloat(productItem.price)}}</view>
     </view>
   </view>
 </template>

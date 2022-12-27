@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-11 01:15:23
- * @LastEditTime: 2022-12-27 19:50:42
+ * @LastEditTime: 2022-12-27 19:49:24
  * @LastEditors: you name
  * @Description: 
 -->
@@ -96,10 +96,9 @@
                     <text
                       class="info text-xs text-gray-500">{{productItem.desc}}</text>
                     <view class="flex justify-between mt-3 items-center ">
-                      <view class="text-orange-500 tracking-tighter">
-                        <text>¥</text>
-                        <text class="">{{parseFloat(productItem.price)}}</text>
-                      </view>
+                      <text class="text-orange-500 tracking-tighter">¥
+                        <text>{{parseFloat(productItem.price)}}</text>
+                      </text>
                       <view class="relative">
                         <text
                           class="iconfont bg-selectText text-white rounded-full w-6 h-6 flex items-center  justify-center"

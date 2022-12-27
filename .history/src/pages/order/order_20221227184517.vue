@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-27 19:47:33
+ * @LastEditTime: 2022-12-27 18:45:16
  * @LastEditors: you name
  * @Description: 订单页
 -->
@@ -50,11 +50,11 @@
           >
             <view>{{orderItem.updatedAt}}</view>
             <view v-show="orderItem.status==1">
-              <!-- <text>订单</text> -->
+              <text>订单</text>
               <text class="text-selectText">进行中</text>
             </view>
             <view v-show="orderItem.status==2">
-              <!-- <text>订单</text> -->
+              <text>订单</text>
               <text class="text-selectText">已完成</text>
             </view>
           </view>
@@ -191,9 +191,26 @@ export default {
       this.getData(index)
     },
 
-
-
     getData (type = 0) {
+
+
+      function transformationTime (inputTime) {
+        var date = new Date(inputTime * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + ' ' + h + ':' + minute + ':' + second;
+      }
+
+
 
       console.log('获取订单');
       findOrder(type).then(response => {
@@ -204,39 +221,10 @@ export default {
 
           response.result.forEach(item => {
 
-            /* 将UTC时间转换成东八区时间 */
-            function formatTime (utc_datetime) {
-              // 转为正常的时间格式 年-月-日 时:分:秒
-              var new_datetime = utc_datetime.split("T")[0] + " " + utc_datetime.split("T")[1].split(".")[0];
-              // 处理成为时间戳
-              timestamp = new Date(Date.parse(new_datetime));
-              timestamp = timestamp.getTime();
-              timestamp = timestamp / 1000;
-              // 增加8个小时，北京时间比utc时间多八个时区
-              var timestamp = timestamp + 8 * 60 * 60;
-              // 时间戳转为时间
-              var n = parseInt(timestamp) * 1000;
-              var D = new Date(n);
-              var year = D.getFullYear(); //四位数年份
-              var month = D.getMonth() + 1; //月份(0-11),0为一月份
-              month = month < 10 ? ('0' + month) : month;
-              var day = D.getDate(); //月的某一天(1-31)
-              day = day < 10 ? ('0' + day) : day;
-              var hours = D.getHours(); //小时(0-23)
-              hours = hours < 10 ? ('0' + hours) : hours;
-              var minutes = D.getMinutes(); //分钟(0-59)
-              minutes = minutes < 10 ? ('0' + minutes) : minutes;
-              var seconds = D.getSeconds(); //秒(0-59)
-              seconds = seconds < 10 ? ('0' + seconds) : seconds;
-              var beijing_datetime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
-              return beijing_datetime; // 2020-10-11 15:32:06
-            };
-
-            // 格式化金额 （不保留小数点的 0）
             item.price = parseFloat(item.price)
 
             let tempObj = {
-              updatedAt: formatTime(item.updatedAt),
+              updatedAt: transformationTime(item.updatedAt),
               price: item.price * item.count,
               oid: item.oid,
               status: item.status,
@@ -263,7 +251,7 @@ export default {
           })
 
           console.log("findOrder => tempArr", tempArr)
-          this.orderList = tempArr.reverse()
+          this.orderList = tempArr
         }
       })
     },

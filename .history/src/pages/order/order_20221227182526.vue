@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-27 19:47:33
+ * @LastEditTime: 2022-12-27 18:25:26
  * @LastEditors: you name
  * @Description: 订单页
 -->
@@ -40,57 +40,49 @@
         class="overflow-y-scroll h-full "
       >
         <view
-          v-for="(orderItem,orderIndex) in orderList"
-          :key="orderIndex"
+          v-for="(productItem,productIndex) in orderList"
+          :key="productIndex"
           class="p-4 my-4 bg-white rounded-lg"
         >
 
           <view
-            class="pb-4 border-0 border-gray-200 border-b border-dotted flex justify-between"
+            class="pb-4 text-right border-0 border-gray-200 border-b border-dotted"
           >
-            <view>{{orderItem.updatedAt}}</view>
-            <view v-show="orderItem.status==1">
-              <!-- <text>订单</text> -->
+            <view v-show="productItem.status==1">
+              <text>订单</text>
               <text class="text-selectText">进行中</text>
             </view>
-            <view v-show="orderItem.status==2">
-              <!-- <text>订单</text> -->
+            <view v-show="productItem.status==2">
+              <text>订单</text>
               <text class="text-selectText">已完成</text>
             </view>
           </view>
 
-          <view class="border-0 border-gray-200 border-b border-dotted">
+          <view
+            class="flex  items-center gap-2 border-0 border-gray-200 border-b border-dotted py-5"
+          >
+            <image
+              :src="productItem.smallImg"
+              class="w-24 h-24 rounded-full"
+            ></image>
 
-            <view
-              class="flex  items-center gap-2  py-5"
-              v-for="(productItem ,productIndex) in orderItem.children"
-              :key="productIndex"
-            >
-              <image
-                :src="productItem.smallImg"
-                class="w-24 h-24 rounded-full"
-              ></image>
+            <view class="flex-auto">
+              <view class="font-semibold text-lg">{{productItem.name}}</view>
+              <view class="text-gray-400">{{productItem.rule}}</view>
+            </view>
 
-              <view class="flex-auto">
-                <view class="font-semibold text-lg">{{productItem.name}}</view>
-                <view class="text-gray-400">{{productItem.rule}}</view>
+            <view>
+              <view>
+                <text>¥</text>
+                <text>{{productItem.price}}</text>
               </view>
 
               <view>
-                <view>
-                  <text>¥</text>
-                  <text>{{productItem.price}}</text>
-                </view>
-
-                <view>
-                  <text class="iconfont text-xs">&#xe685;</text>
-                  <text>{{productItem.count}}</text>
-                </view>
+                <text class="iconfont text-xs">&#xe685;</text>
+                <text>{{productItem.count}}</text>
               </view>
             </view>
-
           </view>
-          <!-- 商品集合详情 end -->
 
           <view class="flex justify-end pt-4 gap-3 items-center">
 
@@ -99,29 +91,30 @@
               <view class="flex justify-end items-center">
                 <text>合计</text>
                 <text class="ml-2">¥</text>
-                <text class="text-lg">{{orderItem.price}}</text>
+                <text
+                  class="text-lg">{{productItem.price*productItem.count}}</text>
               </view>
               <!-- 价格 end -->
 
               <view class="flex gap-3">
                 <view
                   class="text-selectText border border-solid border-selectText rounded-full px-4 py-1"
-                  @click="receive(orderItem.oid)"
-                  v-if="orderItem.status ===1"
+                  @click="receive(productItem.oid)"
+                  v-if="productItem.status ===1"
                 >
                   确认收货</view>
 
                 <view
                   class="text-selectText border border-solid border-selectText rounded-full px-4 py-1"
-                  v-if="orderItem.status ===2"
+                  v-if="productItem.status ===2"
                   @click="goShopping"
                 >
                   再来一单</view>
 
                 <view
                   class="text-selectText border border-solid border-selectText rounded-full px-4 py-1"
-                  v-if="orderItem.status ===2"
-                  @click="removeOrder(orderItem.oid)"
+                  v-if="productItem.status ===2"
+                  @click="removeOrder(productItem.oid)"
                 >
                   删除订单</view>
 
@@ -191,10 +184,7 @@ export default {
       this.getData(index)
     },
 
-
-
     getData (type = 0) {
-
       console.log('获取订单');
       findOrder(type).then(response => {
         console.log("findOrder => response", response)
@@ -204,39 +194,10 @@ export default {
 
           response.result.forEach(item => {
 
-            /* 将UTC时间转换成东八区时间 */
-            function formatTime (utc_datetime) {
-              // 转为正常的时间格式 年-月-日 时:分:秒
-              var new_datetime = utc_datetime.split("T")[0] + " " + utc_datetime.split("T")[1].split(".")[0];
-              // 处理成为时间戳
-              timestamp = new Date(Date.parse(new_datetime));
-              timestamp = timestamp.getTime();
-              timestamp = timestamp / 1000;
-              // 增加8个小时，北京时间比utc时间多八个时区
-              var timestamp = timestamp + 8 * 60 * 60;
-              // 时间戳转为时间
-              var n = parseInt(timestamp) * 1000;
-              var D = new Date(n);
-              var year = D.getFullYear(); //四位数年份
-              var month = D.getMonth() + 1; //月份(0-11),0为一月份
-              month = month < 10 ? ('0' + month) : month;
-              var day = D.getDate(); //月的某一天(1-31)
-              day = day < 10 ? ('0' + day) : day;
-              var hours = D.getHours(); //小时(0-23)
-              hours = hours < 10 ? ('0' + hours) : hours;
-              var minutes = D.getMinutes(); //分钟(0-59)
-              minutes = minutes < 10 ? ('0' + minutes) : minutes;
-              var seconds = D.getSeconds(); //秒(0-59)
-              seconds = seconds < 10 ? ('0' + seconds) : seconds;
-              var beijing_datetime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
-              return beijing_datetime; // 2020-10-11 15:32:06
-            };
-
-            // 格式化金额 （不保留小数点的 0）
             item.price = parseFloat(item.price)
 
             let tempObj = {
-              updatedAt: formatTime(item.updatedAt),
+              updatedAt: item.updatedAt,
               price: item.price * item.count,
               oid: item.oid,
               status: item.status,
@@ -246,16 +207,13 @@ export default {
             if (tempArr.length == 0) {
 
               tempArr.push(tempObj)
-
             } else {
 
-              const index = tempArr.findIndex(i => i.oid === item.oid)
-              if (index > -1) {
-                tempArr[index].children.push(item)
+              for (let i in tempArr) {
 
-                tempArr[index].price = tempArr[index].price + item.price * item.count
-              } else {
-                tempArr.push(tempObj)
+                if (item.oid == tempArr[i].oid) {
+                  tempArr[i].children.push(item)
+                }
               }
 
             }
@@ -263,7 +221,7 @@ export default {
           })
 
           console.log("findOrder => tempArr", tempArr)
-          this.orderList = tempArr.reverse()
+          this.orderList = response.result
         }
       })
     },

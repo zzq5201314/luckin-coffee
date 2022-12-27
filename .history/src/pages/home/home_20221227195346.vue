@@ -333,8 +333,7 @@ export default {
 }
 /deep/ .segmented-control__item--text {
   // position: relative;
-  border-bottom-width: 2px;
-  border-color: #0f0f99;
+  // border-color: #0f0f99;
 }
 // /deep/ .segmented-control__item--text::after {
 //   /* 必须设置 content 属性才能生效 */

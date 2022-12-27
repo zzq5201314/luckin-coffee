@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-27 19:47:33
+ * @LastEditTime: 2022-12-27 19:45:47
  * @LastEditors: you name
  * @Description: 订单页
 -->
@@ -50,11 +50,9 @@
           >
             <view>{{orderItem.updatedAt}}</view>
             <view v-show="orderItem.status==1">
-              <!-- <text>订单</text> -->
               <text class="text-selectText">进行中</text>
             </view>
             <view v-show="orderItem.status==2">
-              <!-- <text>订单</text> -->
               <text class="text-selectText">已完成</text>
             </view>
           </view>
@@ -263,7 +261,7 @@ export default {
           })
 
           console.log("findOrder => tempArr", tempArr)
-          this.orderList = tempArr.reverse()
+          this.orderList = tempArr
         }
       })
     },
