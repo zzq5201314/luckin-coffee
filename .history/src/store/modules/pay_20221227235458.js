@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-27 20:32:37
- * @LastEditTime: 2022-12-27 23:56:05
+ * @LastEditTime: 2022-12-27 23:54:58
  * @LastEditors: you name
  * @Description: 
  */
@@ -120,7 +120,6 @@ const actions = {
 						addShopCart(context.state.oldData).then(response => {
 
 							if (response.code === 3000) {
-								// 重新获取购物车数据
 								store.dispatch("shopCart/getShopCartData")
 							}
 
@@ -128,6 +127,8 @@ const actions = {
 						})
 
 					}
+
+
 
 					// 重置 state
 					context.commit('RESET_STATE')

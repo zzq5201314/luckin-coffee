@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-27 20:32:37
- * @LastEditTime: 2022-12-27 23:56:05
+ * @LastEditTime: 2022-12-27 23:53:25
  * @LastEditors: you name
  * @Description: 
  */
@@ -118,16 +118,16 @@ const actions = {
 
 						// 把原来购物车的数据重新执行添加购物车、达到复原数据
 						addShopCart(context.state.oldData).then(response => {
+							console.log("addShopCart => response", response)
 
-							if (response.code === 3000) {
-								// 重新获取购物车数据
-								store.dispatch("shopCart/getShopCartData")
-							}
+							console.log('恢复购物车原来的数据');
 
-
+							store.dispatch("shopCart/getShopCartData")
 						})
 
 					}
+
+
 
 					// 重置 state
 					context.commit('RESET_STATE')

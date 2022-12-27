@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 23:50:35
+ * @LastEditTime: 2022-12-27 23:48:16
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -146,8 +146,12 @@ export default {
   onUnload () { // 监听页面卸载
 
     if (this.paySid) {
-      this.$store.dispatch("pay/resetState", [this.paySid])
+      this.$store.dispatch("pay/resetState", [this.paySid]).then(_ => {
 
+        console.log('执行获取购物车数据');
+        this.$store.dispatch("shopCart/getShopCartData")
+
+      })
     }
 
   },
