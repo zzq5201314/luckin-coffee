@@ -182,8 +182,6 @@ export default {
   },
   onShow () {
     this.getData()
-  },
-  onLoad () {
 
   },
   // 函数

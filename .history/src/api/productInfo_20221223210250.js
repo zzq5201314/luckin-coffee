@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-13 19:17:59
- * @LastEditTime: 2022-12-27 22:05:00
+ * @LastEditTime: 2022-12-17 22:02:30
  * @LastEditors: you name
  * @Description: 
  */
@@ -53,7 +53,6 @@ export function notLike (pid) {
 	})
 }
 
-// 添加购物车
 export function addShopCart (data) {
 	return request({
 		url: '/addShopcart',

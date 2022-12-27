@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-27 22:34:07
+ * @LastEditTime: 2022-12-27 22:12:14
  * @LastEditors: you name
  * @Description: 
 -->
@@ -314,14 +314,8 @@ export default {
 
       if (type == 'pay') {
 
-        this.$store.dispatch("pay/setPayNowData", data).then(sid => {
-
-          this.$Router.push({
-            path: '/pages/commitOrder/commitOrder',
-            query: {
-              sids: [sid]
-            }
-          })
+        this.$store.dispatch("pay/setPayNowData", data).then(() => {
+          console.log("addShopCart => data", data)
 
         })
 

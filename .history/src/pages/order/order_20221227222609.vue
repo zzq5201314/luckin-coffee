@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-27 22:29:21
+ * @LastEditTime: 2022-12-27 22:25:56
  * @LastEditors: you name
  * @Description: 订单页
 -->
@@ -166,24 +166,27 @@ export default {
       orderList: []
     }
   },
-  onReady () {
+  onLoad () {
 
     uni.getSystemInfo({
       success: (res) => {
         this.windowTop = res.windowTop
         this.windowHeight = res.windowHeight
+        console.log("onLoad => this.windowHeight", this.windowHeight)
 
-        let tabber = uni.createSelectorQuery().select(".tabber")
-        tabber.boundingClientRect((data) => {
-          this.contentHeight = this.windowHeight - data.height
-        }).exec()
       }
     })
+
   },
   onShow () {
+
     this.getData()
-  },
-  onLoad () {
+
+    let tabber = uni.createSelectorQuery().select(".tabber")
+    tabber.boundingClientRect((data) => {
+      this.contentHeight = this.windowHeight - data.height
+      console.log("tabber.boundingClientRect => this.contentHeight", this.contentHeight)
+    }).exec()
 
   },
   // 函数
@@ -192,8 +195,6 @@ export default {
       this.activeTabber = index
       this.getData(index)
     },
-
-
 
     getData (type = 0) {
 

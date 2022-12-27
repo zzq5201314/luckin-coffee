@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-10 15:06:26
- * @LastEditTime: 2022-12-27 22:29:21
+ * @LastEditTime: 2022-12-27 22:23:30
  * @LastEditors: you name
  * @Description: 订单页
 -->
@@ -166,7 +166,7 @@ export default {
       orderList: []
     }
   },
-  onReady () {
+  onLoad () {
 
     uni.getSystemInfo({
       success: (res) => {
@@ -179,11 +179,13 @@ export default {
         }).exec()
       }
     })
+
   },
   onShow () {
+
+
+
     this.getData()
-  },
-  onLoad () {
 
   },
   // 函数
@@ -192,8 +194,6 @@ export default {
       this.activeTabber = index
       this.getData(index)
     },
-
-
 
     getData (type = 0) {
 

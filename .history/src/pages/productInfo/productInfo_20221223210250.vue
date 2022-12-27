@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-12 23:32:41
- * @LastEditTime: 2022-12-27 22:34:07
+ * @LastEditTime: 2022-12-19 17:34:04
  * @LastEditors: you name
  * @Description: 
 -->
@@ -121,11 +121,10 @@
         <view class="grid grid-cols-2 gap-4 text-center ">
           <text
             class="border rounded-full py-2 border-solid bg-white text-orange-300 border-orange-300"
-            @click="addShopCart('pay')"
           >立即购买</text>
           <text
             class="border rounded-full py-2 border-solid bg-selectText text-white border-selectText"
-            @click="addShopCart('addShopCart')"
+            @click="addShopCart"
           >加入购物车</text>
         </view>
       </view>
@@ -300,7 +299,7 @@ export default {
     },
 
     // 添加购物车
-    addShopCart (type) {
+    addShopCart () {
       let arr = []
       // 循环遍历出规格
       this.productData.productRules.forEach(i => {
@@ -311,41 +310,22 @@ export default {
         pid: this.productData.pid,
         rule: arr.join('/')
       }
-
-      if (type == 'pay') {
-
-        this.$store.dispatch("pay/setPayNowData", data).then(sid => {
-
-          this.$Router.push({
-            path: '/pages/commitOrder/commitOrder',
-            query: {
-              sids: [sid]
-            }
+      // 执行添加购物车 api
+      addShopCart(data).then(response => {
+        console.log("addShopCart => response", response)
+        if (response.code == 3000) {
+          uni.showToast({
+            title: response.msg,
+            icon: 'none'
           })
-
-        })
-
-      } else if (type == 'addShopCart') {
-
-        // 执行添加购物车 api
-        addShopCart(data).then(response => {
-          console.log("addShopCart => response", response)
-          if (response.code == 3000) {
-            uni.showToast({
-              title: response.msg,
-              icon: 'none'
-            })
-            //  更新购物车
-            this.$store.dispatch('shopCart/getShopCartData')
-            // 返回上一页
-            setTimeout(() => {
-              this.$Router.back(1)
-            }, 500)
-          }
-        })
-
-      }
-
+          //  更新购物车
+          this.$store.dispatch('shopCart/getShopCartData')
+          // 返回上一页
+          setTimeout(() => {
+            this.$Router.back(1)
+          }, 500)
+        }
+      })
     }
   }
 }

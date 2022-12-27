@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 23:01:43
+ * @LastEditTime: 2022-12-27 22:37:14
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -130,14 +130,14 @@ export default {
 
     uni.getSystemInfo({
       success: (res) => {
-        // console.log("onReady => res", res)
+        console.log("onReady => res", res)
 
         let bottom = uni.createSelectorQuery().select(".bottom")
         bottom.boundingClientRect((data) => {
-          // console.log("bottom.boundingClientRect => data", data)
+          console.log("bottom.boundingClientRect => data", data)
           this.windowHeight = res.windowHeight - data.height
         }).exec()
-        // console.log("bottom.boundingClientRect =>  this.windowHeight", this.windowHeight)
+        console.log("bottom.boundingClientRect =>  this.windowHeight", this.windowHeight)
 
       }
     })
@@ -145,8 +145,8 @@ export default {
   },
   onUnload () { // 监听页面卸载
 
-    if (this.paySid) {
-      this.$store.dispatch("pay/resetState", [this.paySid])
+    if (paySid) {
+      this.$store.dispatch("pay/resetState")
     }
 
   },
