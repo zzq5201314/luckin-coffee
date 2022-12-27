@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-25 14:28:37
- * @LastEditTime: 2022-12-27 20:10:47
+ * @LastEditTime: 2022-12-27 20:03:41
  * @LastEditors: you name
  * @Description: 提交订单页api
  */
@@ -22,12 +22,14 @@ export function getCommitOrderProductData (sids) {
 
 // 结算
 export function pay (data) {
-	console.log("pay => data", data)
 	return request({
 		url: "/pay",
 		method: "post",
 		data: {
-			...data,
+			sids: JSON.stringify(data.sids),
+			phone: data.phone,
+			receiver: data.receiver,
+			address: data.address,
 			tokenString: getToken()
 		}
 	})

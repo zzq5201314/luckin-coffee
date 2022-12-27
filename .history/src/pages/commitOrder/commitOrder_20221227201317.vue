@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-27 20:23:43
+ * @LastEditTime: 2022-12-27 20:13:17
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -212,7 +212,7 @@ export default {
             })
 
             setTimeout(() => {
-              this.$Router.pushTab({
+              this.$Router.push({
                 name: "order"
               })
             }, 500)

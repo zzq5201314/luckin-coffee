@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-25 14:28:37
- * @LastEditTime: 2022-12-27 20:10:47
+ * @LastEditTime: 2022-12-27 20:07:15
  * @LastEditors: you name
  * @Description: 提交订单页api
  */
@@ -27,7 +27,10 @@ export function pay (data) {
 		url: "/pay",
 		method: "post",
 		data: {
-			...data,
+			sids: JSON.stringify(data.sid),
+			phone: data.phone,
+			receiver: data.receiver,
+			address: data.address,
 			tokenString: getToken()
 		}
 	})

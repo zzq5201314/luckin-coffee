@@ -180,7 +180,7 @@ export default {
     },
 
     goAddress () {
-      this.$Router.push({
+      this.$Router.pushTab({
         path: '/pages/address/address',
         query: {
           select: 'true'
