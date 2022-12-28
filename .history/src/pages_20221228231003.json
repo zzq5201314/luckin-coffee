@@ -103,7 +103,9 @@
         "title": "个人资料"
       },
       "style": {
-        "navigationBarTitleText": "个人资料"
+        "navigationBarTitleText": "个人资料",
+        "enablePullDownRefresh": false, //禁止下拉刷新
+        "allowsBounceVertical": "NO" //禁止下拉
       }
     },
     {

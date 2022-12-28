@@ -212,8 +212,6 @@ export default {
         setTimeout(() => {
           this.goAddress()
         }, 500)
-
-        return;
       }
 
       let data = {

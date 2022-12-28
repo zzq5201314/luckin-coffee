@@ -182,7 +182,7 @@ export default {
     },
 
     goSettings () {
-      this.$Router.push({
+      this.$Router.pushTab({
         name: "personalData"
       })
     }

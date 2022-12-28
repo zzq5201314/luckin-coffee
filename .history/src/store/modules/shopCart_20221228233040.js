@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-17 22:15:05
- * @LastEditTime: 2022-12-28 23:33:33
+ * @LastEditTime: 2022-12-28 23:30:40
  * @LastEditors: you name
  * @Description: 
  */
@@ -333,10 +333,6 @@ const actions = {
 
 
 
-	},
-
-	resetState ({ commit }) {
-		commit("RESET_STATE")
 	}
 }
 

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-15 22:02:24
- * @LastEditTime: 2022-12-28 23:49:23
+ * @LastEditTime: 2022-12-28 23:45:20
  * @LastEditors: you name
  * @Description:
  */
@@ -14,9 +14,7 @@ const getDefaultState = () => {
 	return {
 		token: getToken(),
 		name: '',
-		userImg: '',
-		phone: '',
-		desc: ''
+		userImg: ''
 	}
 }
 
@@ -34,12 +32,6 @@ const mutations = {
 	},
 	SET_USER_IMG: (state, img) => {
 		state.userImg = img
-	},
-	SET_PHONE: (state, phone) => {
-		state.phone = phone
-	},
-	SET_DESC: (state, desc) => {
-		state.desc = desc
 	}
 }
 
@@ -48,7 +40,7 @@ const actions = {
 		const { phone, password } = userInfo
 		return new Promise((resolve, reject) => {
 			login(userInfo).then(response => {
-				// console.log("login => response", response)
+				console.log("login => response", response)
 				const token = response.token
 				setToken(token)
 				commit('SET_TOKEN', token)
@@ -62,15 +54,16 @@ const actions = {
 		console.log('获取用户信息');
 		return new Promise((resolve, reject) => {
 			getUserInfo().then(response => {
-				const { nickName, userImg, phone, desc } = response.result[0]
-				console.log("getUserInfo => response.result[0]", response.result[0])
+				const { nickName, userImg } = response.result[0]
+				// console.log("getUserInfo => response.result[0]", response.result[0])
 
-				commit("SET_DESC", desc)
-				commit("SET_PHONE", phone)
+				getUser().then(response => {
+					console.log("getUser => response", response)
+
+				})
+				// 获取购物车数据
 				commit('SET_NAME', nickName)
 				commit('SET_USER_IMG', userImg)
-
-
 				// 获取购物车数据
 				store.dispatch('shopCart/getShopCartData')
 

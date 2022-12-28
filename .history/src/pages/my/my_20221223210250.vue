@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-09 23:20:43
- * @LastEditTime: 2022-12-28 23:03:38
+ * @LastEditTime: 2022-12-17 16:06:51
  * @LastEditors: you name
  * @Description: 
 -->
@@ -20,16 +20,9 @@
           <image
             :src="userImg"
             class="h-16 w-16 rounded-full border-2 border-solid border-white bg-white"
-            @click="goSettings"
           ></image>
-          <text
-            class="ml-2 font-semibold"
-            @click="goSettings"
-          >{{name}}</text>
-          <text
-            class="iconfont"
-            @click="goSettings"
-          >&#xe605;</text>
+          <text class="ml-2 font-semibold">{{name}}</text>
+          <text class="iconfont">&#xe605;</text>
         </view>
         <!-- 名字 头像 end -->
 
@@ -170,20 +163,12 @@ export default {
 
       })
     },
-
     unfold () {
       this.isUnfold = !this.isUnfold
     },
-
     routerGo (path) {
       this.$Router.pushTab({
         path
-      })
-    },
-
-    goSettings () {
-      this.$Router.push({
-        name: "personalData"
       })
     }
   }

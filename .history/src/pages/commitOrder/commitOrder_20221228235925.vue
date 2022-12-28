@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-25 13:52:44
- * @LastEditTime: 2022-12-29 00:01:29
+ * @LastEditTime: 2022-12-28 23:59:25
  * @LastEditors: you name
  * @Description: 提交订单页
 -->
@@ -202,19 +202,6 @@ export default {
     },
 
     pay () {
-
-      if (this.addressList.length == 0) {
-        uni.showToast({
-          title: "请先添加收货地址",
-          icon: "none"
-        })
-
-        setTimeout(() => {
-          this.goAddress()
-        }, 500)
-
-        return;
-      }
 
       let data = {
         sids: JSON.stringify(this.$Route.query.sids),
