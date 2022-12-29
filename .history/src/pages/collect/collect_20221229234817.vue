@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-29 22:06:27
- * @LastEditTime: 2022-12-29 23:53:13
+ * @LastEditTime: 2022-12-29 23:48:17
  * @LastEditors: you name
  * @Description: 
 -->
@@ -9,9 +9,9 @@
 <template>
   <view class="collect py-3">
 
-    <view class="bg-white p-4 rounded-lg ">
+    <view class="bg-white p-4 rounded-lg flex flex-col gap-3">
 
-      <uni-swipe-action class="flex flex-col gap-3">
+      <uni-swipe-action>
 
         <uni-swipe-action-item
           v-for="(item ,index ) in productList"
@@ -39,7 +39,6 @@
           <template v-slot:right>
             <view
               class="w-20 flex items-center justify-center bg-red-500 text-white rounded-r-lg"
-              @click="notLike(item.pid)"
             >删除</view>
           </template>
 
@@ -55,7 +54,7 @@
 <script>
 
 
-import { findAllLike, notLike } from "@/api/collect"
+import { findAllLike } from "@/api/collect"
 export default {
   name: "collect",
   data () {
@@ -71,6 +70,8 @@ export default {
     uni.getSystemInfo({
       success: (res) => {
         this.windowHeight = res.windowHeight
+        console.log("onLoad => this.windowHeight", this.windowHeight)
+        console.log("onLoad => res", res)
       }
     })
 
@@ -96,17 +97,6 @@ export default {
         query: { productId: id },
       })
     },
-
-    notLike (id) {
-      notLike(id).then(response => {
-        // console.log("notLike => response", response)
-
-        if (response.code === 900) {
-          this.getData()
-          this.$store.dispatch("user/getCollectCount")
-        }
-      })
-    }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-12-09 22:46:22
- * @LastEditTime: 2022-12-29 23:44:02
+ * @LastEditTime: 2022-12-17 01:03:01
  * @LastEditors: you name
  * @Description: 
  */
@@ -10,7 +10,7 @@
 const TransformPages = require('uni-read-pages')
 const { webpack } = new TransformPages()
 module.exports = {
-	transpileDependencies: ['@dcloudio/uni-ui'],
+
 	configureWebpack: {
 		plugins: [
 			new webpack.DefinePlugin({

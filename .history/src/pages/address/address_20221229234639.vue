@@ -65,6 +65,29 @@
 
         </uni-swipe-action-item>
 
+        <!-- <uni-swipe-action-item @click="bindClick">
+          <template v-slot:left>
+            <view class="slot-button">
+              <text
+                class="slot-button-text"
+                @click="bindClick({position:'left',content:{text:'置顶'}})"
+              >置顶</text>
+            </view>
+          </template>
+          <view
+            class="content-box"
+            @click="contentClick"
+          >
+            <text class="content-text">使用左右插槽</text>
+          </view>
+          <template v-slot:right>
+            <view
+              class="slot-button"
+              @click="bindClick({position:'right',content:{text:'删除'}})"
+            ><text class="slot-button-text">删除</text></view>
+          </template>
+        </uni-swipe-action-item> -->
+
       </uni-swipe-action>
       <!-- {{ addressList }} -->
 

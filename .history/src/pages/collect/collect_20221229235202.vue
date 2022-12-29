@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-29 22:06:27
- * @LastEditTime: 2022-12-29 23:53:13
+ * @LastEditTime: 2022-12-29 23:51:32
  * @LastEditors: you name
  * @Description: 
 -->
@@ -71,6 +71,8 @@ export default {
     uni.getSystemInfo({
       success: (res) => {
         this.windowHeight = res.windowHeight
+        console.log("onLoad => this.windowHeight", this.windowHeight)
+        console.log("onLoad => res", res)
       }
     })
 
@@ -99,10 +101,10 @@ export default {
 
     notLike (id) {
       notLike(id).then(response => {
-        // console.log("notLike => response", response)
+        console.log("notLike => response", response)
 
         if (response.code === 900) {
-          this.getData()
+
           this.$store.dispatch("user/getCollectCount")
         }
       })

@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-26 21:28:20
- * @LastEditTime: 2022-12-29 23:46:17
+ * @LastEditTime: 2022-12-29 23:11:52
  * @LastEditors: you name
  * @Description: 
 -->
@@ -17,26 +17,29 @@
       class=" bg-white rounded-lg overflow-hidden"
       v-show="addressList.length>0"
     >
-
-      <uni-swipe-action>
+      <!-- {{ addressList }} -->
+      <view
+        v-for="(item , index) in addressList"
+        :key="index"
+        :data-index="index"
+        class=" relative addressItem"
+        @click="select(item.aid)"
+      >
 
         <uni-swipe-action-item
-          v-for="(item , index) in addressList"
-          :key="index"
-          class=""
-          :threshold="0"
+          class="flex items-center py-3 px-3 border-0 border-b border-solid border-gray-100 gap-4"
         >
-
-          <view
-            @click="select(item.aid)"
-            class="flex items-center py-3 px-3 border-0 border-b border-solid border-gray-100 gap-4"
-          >
+          <template v-slot:left>
+            <view><text>置顶</text></view>
+          </template>
+          <view class="flex-auto">
             <view v-if="item.isDefault==1">
               <text
                 class="iconfont text-xl bg-selectText text-white rounded-full"
               >&#xe807;
               </text>
             </view>
+            <!-- 选择按钮 end -->
 
             <view class="flex-auto">
               <view class="text-gray-500 text-sm">
@@ -49,24 +52,25 @@
                 <text class="ml-1 text-gray-500">{{ item.tel }}</text>
               </view>
             </view>
+            <!-- 地址详情 end -->
 
             <view
               class="iconfont text-xl"
               @click="edit(item.aid)"
             >&#xe612;</view>
-
+            <!-- 修改按钮 end -->
           </view>
           <template v-slot:right>
-            <view
-              @click="dleAddress(item.aid)"
-              class="text-white bg-red-600 rounded-r-lg flex justify-center items-center w-20"
-            >删除</view>
+            <view><text>删除</text></view>
           </template>
-
         </uni-swipe-action-item>
 
-      </uni-swipe-action>
-      <!-- {{ addressList }} -->
+        <!-- <view
+          class="remove absolute top-0 right-0 h-full text-white bg-red-600 border-white border-solid border rounded-r-lg -mr-3 flex justify-center items-center "
+          @click="dleAddress(item.aid)"
+        >删除
+        </view> -->
+      </view>
 
       <!-- <view :style="{height:btnHeight+'px'}"></view> -->
 
@@ -178,6 +182,8 @@ export default {
       })
 
 
+      // deleteAddress(aid).then(response => {
+
       //   // console.log("deleteAddress => response", response)
 
       //   if (response.code === 10000) {
@@ -212,16 +218,7 @@ export default {
         }
       })
 
-    },
-
-
-    bindClick (e) {
-      console.log(e);
-      uni.showToast({
-        title: `点击了${e.position === 'left' ? '左侧' : '右侧'} ${e.content.text}按钮`,
-        icon: 'none'
-      });
-    },
+    }
 
   }
 }
@@ -229,6 +226,15 @@ export default {
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
 .address {
+  .remove {
+    width: 80px;
+
+    transform: translateX(100%);
+  }
+
+  .addressItem::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .page {

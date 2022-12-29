@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-26 21:28:20
- * @LastEditTime: 2022-12-29 23:46:17
+ * @LastEditTime: 2022-12-29 23:38:49
  * @LastEditors: you name
  * @Description: 
 -->
@@ -27,6 +27,10 @@
           :threshold="0"
         >
 
+          <!-- <template v-slot:left>
+            <view><text>置顶</text></view>
+          </template> -->
+
           <view
             @click="select(item.aid)"
             class="flex items-center py-3 px-3 border-0 border-b border-solid border-gray-100 gap-4"
@@ -37,6 +41,7 @@
               >&#xe807;
               </text>
             </view>
+            <!-- 选择按钮 end -->
 
             <view class="flex-auto">
               <view class="text-gray-500 text-sm">
@@ -49,12 +54,13 @@
                 <text class="ml-1 text-gray-500">{{ item.tel }}</text>
               </view>
             </view>
+            <!-- 地址详情 end -->
 
             <view
               class="iconfont text-xl"
               @click="edit(item.aid)"
             >&#xe612;</view>
-
+            <!-- 修改按钮 end -->
           </view>
           <template v-slot:right>
             <view
@@ -63,6 +69,29 @@
             >删除</view>
           </template>
 
+        </uni-swipe-action-item>
+
+        <uni-swipe-action-item @click="bindClick">
+          <template v-slot:left>
+            <view class="slot-button">
+              <text
+                class="slot-button-text"
+                @click="bindClick({position:'left',content:{text:'置顶'}})"
+              >置顶</text>
+            </view>
+          </template>
+          <view
+            class="content-box"
+            @click="contentClick"
+          >
+            <text class="content-text">使用左右插槽</text>
+          </view>
+          <template v-slot:right>
+            <view
+              class="slot-button"
+              @click="bindClick({position:'right',content:{text:'删除'}})"
+            ><text class="slot-button-text">删除</text></view>
+          </template>
         </uni-swipe-action-item>
 
       </uni-swipe-action>

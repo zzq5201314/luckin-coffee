@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-26 21:28:20
- * @LastEditTime: 2022-12-29 23:46:17
+ * @LastEditTime: 2022-12-29 23:23:11
  * @LastEditors: you name
  * @Description: 
 -->
@@ -24,9 +24,11 @@
           v-for="(item , index) in addressList"
           :key="index"
           class=""
-          :threshold="0"
         >
 
+          <template v-slot:left>
+            <view><text>置顶</text></view>
+          </template>
           <view
             @click="select(item.aid)"
             class="flex items-center py-3 px-3 border-0 border-b border-solid border-gray-100 gap-4"
@@ -37,6 +39,7 @@
               >&#xe807;
               </text>
             </view>
+            <!-- 选择按钮 end -->
 
             <view class="flex-auto">
               <view class="text-gray-500 text-sm">
@@ -49,12 +52,13 @@
                 <text class="ml-1 text-gray-500">{{ item.tel }}</text>
               </view>
             </view>
+            <!-- 地址详情 end -->
 
             <view
               class="iconfont text-xl"
               @click="edit(item.aid)"
             >&#xe612;</view>
-
+            <!-- 修改按钮 end -->
           </view>
           <template v-slot:right>
             <view
@@ -178,6 +182,8 @@ export default {
       })
 
 
+      // deleteAddress(aid).then(response => {
+
       //   // console.log("deleteAddress => response", response)
 
       //   if (response.code === 10000) {
@@ -212,16 +218,7 @@ export default {
         }
       })
 
-    },
-
-
-    bindClick (e) {
-      console.log(e);
-      uni.showToast({
-        title: `点击了${e.position === 'left' ? '左侧' : '右侧'} ${e.content.text}按钮`,
-        icon: 'none'
-      });
-    },
+    }
 
   }
 }
